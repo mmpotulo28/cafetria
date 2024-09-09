@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import MenuSlider from '../components/MenuSlider';
 import ItemsBlock from '../components/ItemsBlock';
@@ -8,7 +6,7 @@ import Sponsors from '../components/Sponsors';
 
 export default function Home() {
 	return (
-		<main>
+		<>
 			<MenuSlider />
 
 			<section id='recommended'>
@@ -24,6 +22,6 @@ export default function Home() {
 
 			{/* sponsors */}
 			<Sponsors />
-		</main>
+		</>
 	);
 }

@@ -753,6 +753,7 @@ main {
 .items-block .item-card .details .item-name {
 	color: var(--prim-color);
 	margin: 10px 0;
+	font-size: 21px;
 }
 
 .items-block .item-card .details .buttons {

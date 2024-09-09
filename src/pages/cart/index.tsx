@@ -1,16 +1,8 @@
 import React from 'react';
 import CartTableRow from './components/cartTableRow';
+import Link from 'next/link';
 
 const CartPage: React.FC = () => {
-	// const cartItem = {
-	// 	id: itemID,
-	// 	image: viewItemDom().itemImage.src,
-	// 	name: currentItem.name,
-	// 	extras: extras,
-	// 	quantity: viewItemDom().quantityDom.value,
-	// 	total: viewItemDom().totalDom.innerText,
-	// };
-
 	// dummy cart data
 	const cartItems = [
 		{
@@ -53,12 +45,12 @@ const CartPage: React.FC = () => {
 			</table>
 			<div className='below-table-sec'>
 				<div className='continue-shopping'>
-					<a className='btn' href='/index.html'>
+					<Link className='btn' href='/'>
 						Continue Shopping
-					</a>
+					</Link>
 				</div>
 				<div className='checkout'>
-					<a className='btn' href='/pages/checkout.html'>
+					<a className='btn' href='/checkout'>
 						Checkout
 					</a>
 				</div>

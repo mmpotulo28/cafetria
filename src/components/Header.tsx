@@ -80,7 +80,7 @@ const Header: React.FC = () => {
 
 				<ul className='right-nav-items slide-in-left'>
 					<li className='nav-item slide-down'>
-						<Link href='/pages/cart' className='nav-link'>
+						<Link href='/cart' className='nav-link'>
 							<i className='fa fa-shopping-cart'></i>
 						</Link>
 						<p className='cart-count'>0</p>
