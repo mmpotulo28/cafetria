@@ -1,5 +1,3 @@
-import { ReactElement } from 'react';
-
 export interface iItem {
 	key?: number;
 	id: number;
@@ -27,8 +25,6 @@ export interface iItemsBlockProps {
 	itemClassName?: string;
 	filterByChoice: string;
 	filterByValue: string;
-	leftButton?: ReactElement<any, any> | null;
-	rightButton?: ReactElement<any, any> | null;
 }
 
 export interface iSlide {

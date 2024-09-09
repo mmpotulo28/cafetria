@@ -1,4 +1,4 @@
-import { iItem } from '@/app/lib/Types';
+import { iItem } from '@/lib/Types';
 import React from 'react';
 import { ViewItemBlockProps } from '../types/types';
 
