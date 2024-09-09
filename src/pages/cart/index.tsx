@@ -1,10 +1,11 @@
 import React from 'react';
 import CartTableRow from './components/cartTableRow';
 import Link from 'next/link';
+import { iProduct } from './types/types';
 
 const CartPage: React.FC = () => {
 	// dummy cart data
-	const cartItems = [
+	const cartItems: iProduct[] = [
 		{
 			id: 1,
 			image: '/images/applepay.jpg',
@@ -38,7 +39,7 @@ const CartPage: React.FC = () => {
 				</thead>
 
 				<tbody>
-					{cartItems?.map((product: any) => (
+					{cartItems.map((product: iProduct) => (
 						<CartTableRow product={product} />
 					))}
 				</tbody>

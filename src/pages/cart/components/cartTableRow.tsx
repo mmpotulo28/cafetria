@@ -1,6 +1,17 @@
 import React from 'react';
+import { iCartTableRowProps } from '../types/types';
 
-const CartTableRow: React.FC<any> = ({ product }) => {
+const CartTableRow: React.FC<iCartTableRowProps> = ({ product }) => {
+	if (!product) {
+		product = {
+			id: 0,
+			image: '',
+			name: '',
+			extras: '',
+			quantity: 0,
+			total: '',
+		};
+	}
 	return (
 		<tr id={`cartItem${product.id}`}>
 			<td className='product-img'>
@@ -11,10 +22,10 @@ const CartTableRow: React.FC<any> = ({ product }) => {
 			<td>{product.quantity}</td>
 			<td>{product.total}</td>
 			<td>
-				<button className='cart-edit-btn' id={product.id}>
+				<button className='cart-edit-btn' key={product.id}>
 					<i className='fa fa-edit'></i>
 				</button>
-				<button className='cart-del-btn' id={product.id}>
+				<button className='cart-del-btn' key={product.id}>
 					<i className='fa fa-trash'></i>
 				</button>
 			</td>

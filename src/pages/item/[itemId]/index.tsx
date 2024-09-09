@@ -2,8 +2,8 @@
 
 import { filterById } from '@/lib/utils';
 import { items } from '@/lib/data';
-import { iItem } from '@/lib/types.ts';
-import React, { ReactElement } from 'react';
+import { iItem } from '@/lib/types';
+import React from 'react';
 import ViewItemBlock from '../components/ViewItemBlock';
 import ItemsBlock, { scrollNext, scrollPrev } from '@/components/ItemsBlock';
 import { useRouter } from 'next/router';
