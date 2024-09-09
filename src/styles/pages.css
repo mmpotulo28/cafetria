@@ -1,0 +1,482 @@
+.full-height {
+	min-block-size: 82vh;
+}
+
+.black-back {
+	background-color: black !important;
+}
+
+.view-item-block {
+	display: block;
+	position: relative;
+	margin: 10px;
+	max-inline-size: 100%;
+	overflow: hidden;
+	margin-block-start: 150px;
+	padding: 20px;
+}
+
+.view-item-block .view-item {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	background-color: black;
+	color: var(--font-color);
+	margin: 20px 0;
+	padding: 5px;
+	border-radius: 10px;
+	box-shadow: 3px 2px 8px 0 var(--prim-color);
+	inline-size: fit-content;
+}
+
+.view-item-block .view-item .top-block {
+	display: flex;
+	justify-content: space-around;
+	flex-direction: row;
+	border-block-end: 2px solid var(--prim-color);
+	max-inline-size: 95%;
+	min-inline-size: 95%;
+	margin: auto;
+	color: var(--prim-color);
+}
+
+.view-item-block .view-item .top-block .item-status {
+	display: block;
+	color: red;
+	padding: 5px;
+	background-color: var(--tet-color);
+	border-radius: 20px;
+}
+
+.view-item-block .view-item .main-block {
+	display: flex;
+	flex-direction: row;
+	margin: 10px;
+	gap: 30px;
+}
+
+.view-item-block .view-item .main-block .img-block {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-block-size: 100%;
+	max-block-size: 100%;
+	min-inline-size: 200px;
+	max-inline-size: 200px;
+	margin: 0px;
+	padding: 5px 10px;
+	flex-grow: 2;
+	aspect-ratio: 1;
+	overflow: hidden;
+	background-color: var(--font-color);
+	cursor: pointer;
+}
+
+.view-item-block .view-item .main-block .img-block img {
+	max-inline-size: 100%;
+	max-block-size: 100%;
+}
+
+.view-item-block .view-item .main-block .item-description {
+	display: flex;
+	gap: 10px;
+	flex-direction: column;
+	max-inline-size: 200px;
+	font-size: 19px;
+	background-color: rgb(73, 73, 73);
+	padding: 10px;
+	border-radius: 10px;
+}
+
+.view-item-block .view-item .main-block .item-config {
+	padding: 10px;
+	font-size: 19px;
+	min-inline-size: 200px;
+	flex-grow: 1;
+}
+
+.view-item-block .view-item .main-block .item-config #item-config-form {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+.view-item-block .view-item .main-block .item-config #item-config-form .form-group input {
+	inline-size: 50px;
+	font-size: inherit;
+	border: 1px solid var(--prim-color);
+	border-radius: 10px;
+	outline: none;
+	padding: 2px;
+	text-align: center;
+}
+
+.view-item-block .view-item .main-block .item-config #item-config-form .form-group #total {
+	color: var(--prim-color);
+	font-size: 22px;
+	font-weight: bold;
+	display: inline;
+}
+
+.view-item-block .view-item .main-block .item-config #item-config-form .form-group select {
+	block-size: 30px;
+	font-size: inherit;
+	border: none;
+	border-radius: 10px;
+	outline: none;
+}
+
+.item-config #item-config-form .form-group button {
+	font-size: inherit;
+	border: none;
+	background-color: var(--prim-color);
+	color: var(--font-color);
+	padding: 5px 10px;
+	border-radius: 10px;
+	margin-block-start: 20px;
+}
+
+.item-config #item-config-form .form-group button:hover {
+	background-color: var(--sec-color);
+	color: var(--prim-color);
+	font-weight: bold;
+}
+
+/* similar items */
+.similar-items-sec {
+	display: flex;
+	flex-direction: column;
+	box-shadow: 3px 3px 4px 0 var(--tet-color);
+	min-block-size: 250px;
+	background-color: var(--font-color);
+	margin-block-end: 0px;
+	padding: 5px 10px;
+}
+
+.similar-items-sec .top-block {
+	display: flex;
+	flex-direction: row;
+	inline-size: auto;
+	border-block-end: 3px solid var(--prim-color);
+	padding: 5px 10px;
+	justify-content: space-between;
+	color: var(--prim-color);
+}
+
+.btns-block .similar-btn {
+	font-size: 18px;
+	padding: 0 5px;
+	border-radius: 5px;
+	border: 2px solid var(--prim-color);
+	color: var(--prim-color);
+	background-color: var(--sec-color);
+}
+
+.btns-block .similar-btn:hover {
+	background-color: var(--prim-color);
+	color: var(--sec-color);
+	border-color: var(--sec-color);
+}
+
+/* View Cart */
+#view-cart-sec {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	inline-size: 95%;
+	background-color: var(--tet-color);
+	padding: 20px;
+	margin: 20px auto;
+	margin-block-start: 150px;
+	max-inline-size: calc(95% - 40px);
+	overflow-y: hidden;
+	overflow-x: auto;
+	border-radius: 10px;
+	min-block-size: 80vh;
+}
+
+#view-cart-sec .cart-table {
+	display: table;
+	text-align: center;
+	inline-size: 100%;
+	min-inline-size: 100%;
+	margin: 0 auto;
+	box-shadow: 2px 3px 7px 0 var(--forth-color);
+	font-size: 14px;
+	border: 2px solid var(--sec-color);
+	background-color: black;
+	empty-cells: hide;
+	border-radius: 10px;
+	overflow: hidden;
+	color: var(--font-color);
+	border: 0;
+	border-collapse: collapse;
+}
+
+#view-cart-sec .cart-table thead tr {
+	background-color: var(--prim-color);
+	color: var(--sec-color);
+	border-radius: 10px;
+}
+
+#view-cart-sec .cart-table thead tr th {
+	font-size: 20px;
+	padding: 5px 10px;
+}
+
+#view-cart-sec .cart-table tbody tr td {
+	display: table-cell;
+	padding: 10px 5px;
+	border-block-end: 1px solid var(--prim-color);
+	border-radius: 5px;
+	column-fill: balance;
+	font-size: 18px;
+}
+
+#view-cart-sec .cart-table tbody #total-row td {
+	color: var(--prim-color);
+	font-size: 25px;
+	text-align: end;
+	font-weight: bold;
+	border-radius: 0;
+	border-inline-end: 2px solid var(--prim-color);
+	padding: 10px 20px;
+}
+
+#view-cart-sec .cart-table tbody #total-row td:last-child {
+	text-align: center;
+	/* background-color: var(--forth-color); */
+	color: var(--tet-color);
+}
+
+#view-cart-sec .cart-table tbody tr td.product-img {
+	background-color: var(--font-color) !important;
+	border-radius: 0;
+	border: none;
+	box-shadow: 3px 2px 4px 0 var(--prim-color);
+}
+
+#view-cart-sec .cart-table tbody tr td img {
+	max-inline-size: 120px;
+	inline-size: auto;
+	max-block-size: 100px;
+}
+
+#view-cart-sec .cart-table tbody tr td button {
+	background-color: var(--prim-color);
+	color: black;
+	border: 1px solid var(--tet-color);
+	padding: 5px;
+	border-radius: 5px;
+	font-size: 16px;
+	margin: 5px 2px;
+	box-shadow: 2px 2px 3px 0 var(--forth-color);
+}
+
+#view-cart-sec .below-table-sec {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	padding: 20px 10px;
+	gap: 20px;
+}
+
+#view-cart-sec .below-table-sec .total {
+	font-size: 25px;
+	color: var(--prim-color);
+}
+
+#view-cart-sec .below-table-sec .btn {
+	font-size: 20px;
+	padding: 5px 10px;
+	border-radius: 5px;
+	border: 2px solid var(--prim-color);
+	color: var(--prim-color);
+	background-color: var(--sec-color);
+}
+
+/** checkout section **/
+
+.checkout-sec {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, auto));
+	justify-content: center;
+	margin: 150px auto 20px auto;
+	box-shadow: 2px 2px 4px 0 black;
+	padding: 20px;
+	border-radius: 5px;
+	max-inline-size: 90%;
+	background-color: var(--tet-color);
+	gap: 40px;
+}
+
+.checkout-sec h2 {
+	color: var(--prim-color);
+}
+
+.checkout-sec .personal-info-cont {
+	background-color: black;
+	padding: 20px;
+	border-radius: 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 20px;
+}
+
+.checkout-sec .personal-info-cont form {
+	inline-size: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.checkout-sec .personal-info-cont .form-group {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: 10px;
+	color: var(--font-color);
+	font-size: 20px;
+}
+
+.checkout-sec .personal-info-cont .form-group input {
+	padding: 5px;
+	border-radius: 5px;
+	border: 2px solid var(--prim-color);
+	font-size: 18px;
+	background-color: black;
+	color: var(--font-color);
+}
+
+.checkout-sec .personal-info-cont .form-group input:focus {
+	outline: none;
+	box-shadow: 2px 2px 4px 0 var(--prim-color);
+}
+
+.checkout-sec .order-summary-cont {
+	background-color: var(--forth-color);
+	padding: 20px;
+	border-radius: 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 20px;
+	color: var(--font-color);
+	box-shadow: 2px 2px 4px 0 black;
+}
+
+.checkout-sec .order-summary-cont .order-summary {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 5px;
+	color: var(--font-color);
+}
+
+.checkout-sec .order-summary-cont .order-item {
+	display: flex;
+	flex-direction: row;
+	gap: 20px;
+	background-color: black;
+	color: var(--font-color);
+	border: 2px solid var(--forth-color);
+	padding: 4px 10px;
+	border-radius: 5px;
+	min-inline-size: 95%;
+	max-inline-size: 95%;
+	font-weight: 400;
+	font-size: 16px;
+}
+
+.checkout-sec .order-summary-cont .order-item .item-details {
+	display: flex;
+	gap: 10px;
+	justify-content: space-between;
+	align-items: center;
+	inline-size: 100%;
+	font-size: inherit;
+}
+
+.checkout-sec .order-summary-cont .order-total {
+	font-size: 25px;
+	color: var(--prim-color);
+	margin-block-start: 20px;
+}
+
+.checkout-sec .payment-cont {
+	background-color: black;
+	padding: 20px;
+	border-radius: 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 20px;
+	color: var(--font-color);
+	block-size: fit-content;
+}
+
+.checkout-sec .payment-cont form {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	inline-size: 100%;
+}
+
+.checkout-sec .payment-cont .payment-option {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	gap: 10px;
+	color: var(--font-color);
+	font-size: 20px;
+}
+
+.checkout-sec .payment-cont .payment-option input[type='radio'] {
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	inline-size: 20px;
+	block-size: 20px;
+	border-radius: 50%;
+	border: 2px solid var(--prim-color);
+	background-color: var(--font-color);
+	outline: none;
+	cursor: pointer;
+	margin: auto 0;
+}
+
+.checkout-sec .payment-cont .payment-option input[type='radio']:checked {
+	background-color: var(--prim-color);
+}
+
+.checkout-sec .payment-cont .payment-option label {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	inline-size: 100%;
+	text-align: start;
+}
+
+.checkout-sec .payment-cont .payment-option img {
+	max-inline-size: 50px;
+	max-block-size: 30px;
+}
+
+.checkout-sec .payment-cont .payment-option p {
+	inline-size: 100%;
+	padding: 0 10px;
+}
+
+.checkout-sec .payment-cont form button {
+	background-color: var(--prim-color);
+	border: none;
+	font-size: 18px;
+	padding: 5px 10px;
+}
+
+.checkout-sec .payment-cont form button:hover {
+	background-color: var(--sec-color);
+}
