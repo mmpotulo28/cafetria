@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { iItem } from '../lib/Types';
+import { iItem } from '../lib/types';
 
 interface iDomItemProps {
 	className: string;

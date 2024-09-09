@@ -2,7 +2,7 @@
 
 import { filterById } from '@/lib/utils';
 import { items } from '@/lib/data';
-import { iItem } from '@/lib/Types';
+import { iItem } from '@/lib/types.ts';
 import React, { ReactElement } from 'react';
 import ViewItemBlock from '../components/ViewItemBlock';
 import ItemsBlock, { scrollNext, scrollPrev } from '@/components/ItemsBlock';

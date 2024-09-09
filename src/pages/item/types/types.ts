@@ -1,4 +1,4 @@
-import { iItem } from '../../../lib/Types';
+import { iItem } from '../../../lib/types';
 
 export interface ViewItemBlockProps {
 	item: iItem;

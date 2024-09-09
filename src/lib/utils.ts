@@ -1,4 +1,4 @@
-import { iItem } from './Types';
+import { iItem } from './types';
 
 export const filterByCategory = (category: string, items: iItem[]) => {
 	if (category === 'All') {

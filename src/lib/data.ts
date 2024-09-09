@@ -1,4 +1,4 @@
-import { iItem, iCategory } from './Types';
+import { iItem, iCategory } from './types';
 
 const items: iItem[] = [
 	{
