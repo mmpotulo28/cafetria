@@ -14,6 +14,15 @@ export interface iItem {
 	};
 }
 
+export interface iCartItem {
+	id: number;
+	name: string;
+	extras: string;
+	quantity: number;
+	total: string;
+	image: string;
+}
+
 export interface iCategory {
 	name: string;
 	image: string;

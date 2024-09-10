@@ -9,4 +9,6 @@ export interface iProduct {
 
 export interface iCartTableRowProps {
 	product: iProduct;
+	editOnclick: (e: React.MouseEvent<HTMLButtonElement>, id: number) => void;
+	delOnclick: (e: React.MouseEvent<HTMLButtonElement>, id: number) => void;
 }
