@@ -1,7 +1,7 @@
 import React from 'react';
 import ItemsBlock from './ItemsBlock';
 import { categories } from '@/lib/data';
-import { iCategory } from '@/lib/types';
+import { iCategory } from '@/lib/Type';
 
 const CategorySection: React.FC = () => {
 	const [category, setCategory] = React.useState('All');

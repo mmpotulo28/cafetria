@@ -1,4 +1,4 @@
-import { iCartItem, iItem } from '../../../lib/types';
+import { iCartItem, iItem } from '../../../lib/Type';
 
 export interface ViewItemBlockProps {
 	item: iItem;

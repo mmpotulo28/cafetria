@@ -1,4 +1,4 @@
-import { iCartItem, iItem } from '@/lib/types';
+import { iCartItem, iItem } from '@/lib/Type';
 import React from 'react';
 import { ViewItemBlockProps } from '../types/types';
 

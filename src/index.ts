@@ -7,7 +7,7 @@ export * from './components/MenuSlider';
 export * from './components/Sponsors';
 export * from './components/Updates';
 export * from './lib/data';
-export * from './lib/types';
+export * from './lib/Type';
 export * from './lib/utils';
 export * from './pages/_app';
 export * from './pages/about/index';

@@ -2,7 +2,7 @@
 
 import { filterById } from '@/lib/utils';
 import { items } from '@/lib/data';
-import { iCartItem, iItem } from '@/lib/types';
+import { iCartItem, iItem } from '@/lib/Type';
 import React, { FormEvent } from 'react';
 import ViewItemBlock from '../components/ViewItemBlock';
 import ItemsBlock, { scrollNext, scrollPrev } from '@/components/ItemsBlock';

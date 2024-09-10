@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
-import { iCategory, iItem, iSlide } from '../lib/types';
+import { iCategory, iItem, iSlide } from '../lib/Type';
 import { categories, items } from '../lib/data';
 import useEmblaCarousel from 'embla-carousel-react';
 

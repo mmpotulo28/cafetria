@@ -3,7 +3,7 @@
 import React, { useCallback } from 'react';
 import DomItem from './DomItem';
 import { items } from '../lib/data';
-import { iItem, iItemsBlockProps } from '../lib/types';
+import { iItem, iItemsBlockProps } from '../lib/Type';
 import { filterByCategory, filterByRecommended, filterByStatus } from '../lib/utils';
 import useEmblaCarousel from 'embla-carousel-react';
 export let scrollPrev: () => void;
