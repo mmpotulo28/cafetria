@@ -5,9 +5,10 @@ import { items } from '@/lib/data';
 import { iCartItem, iItem } from '@/lib/Type';
 import React, { FormEvent } from 'react';
 import ViewItemBlock from '../components/ViewItemBlock';
-import ItemsBlock, { scrollNext, scrollPrev } from '@/components/ItemsBlock';
+import { scrollNext, scrollPrev } from '@/components/ItemsBlock';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import SimilarItems from '../components/SimilarItems';
 
 const Page: React.FC = () => {
 	const router = useRouter();
@@ -60,27 +61,8 @@ const Page: React.FC = () => {
 					statusClass=''
 				/>
 			</section>
-			<section className='similar-items-sec'>
-				<div className='top-block'>
-					<h1 className='sec-heading' id='similar-item-heading'>
-						<i className='fa fa-tags'></i> Similar Items
-					</h1>
-					<div className='btns-block'>
-						<button className='similar-btn' id='prev' onClick={scrollPrev}>
-							<i className='fa fa-chevron-left'></i>
-						</button>
-						<button className='similar-btn' id='next' onClick={scrollNext}>
-							<i className='fa fa-chevron-right'></i>
-						</button>
-					</div>
-				</div>
 
-				<ItemsBlock
-					itemClassName='similar-items'
-					filterByChoice='category'
-					filterByValue={item[0]?.category}
-				/>
-			</section>
+			<SimilarItems item={item[0]} scrollNext={scrollNext} scrollPrev={scrollPrev} />
 		</>
 	);
 };
