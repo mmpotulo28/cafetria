@@ -1,7 +1,32 @@
+import DashboardCard from '@/components/DashboardCard';
 import styles from '../styles.module.css';
 import UserLayout from '../UserLayout';
+import { items } from '@/lib/data';
 
 export default function UserDashboardPage() {
+	const userData = {
+		profile: {
+			name: 'John Doe',
+			email: 'someone@gmail.com',
+			age: 30,
+			address: '123 Main St',
+		},
+		orders: [
+			{ id: 1234, status: 'Delivered' },
+			{ id: 1235, status: 'In Progress' },
+			{ id: 1236, status: 'Cancelled' },
+			{ id: 1237, status: 'Delivered' },
+			{ id: 1238, status: 'Delivered' },
+		],
+		notifications: [
+			{ message: 'New order received', type: 'info' },
+			{ message: 'Payment processed successfully', type: 'success' },
+			{ message: 'Error processing order', type: 'error' },
+			{ message: 'Low stock alert', type: 'warning' },
+		],
+		favorites: items.slice(0, 4),
+	};
+
 	return (
 		<UserLayout>
 			<div className={styles.welcomeMessage}>
@@ -10,21 +35,29 @@ export default function UserDashboardPage() {
 			</div>
 
 			<div className={styles.dashboardCards}>
-				<div className={styles.card}>
-					<h3>Recent Orders</h3>
-					<ul className={styles.slideInLeft}> </ul>
-				</div>
-				<div className={styles.card}>
-					<h3>Menu Highlights</h3>
-					<div className={styles.menuItems}> </div>
-				</div>
-				<div className={`${styles.card} ${styles.latestNotifications}`}>
-					<h3>Latest Notifications</h3>
-					<ul> </ul>
-				</div>
-				<div className={`${styles.card} ${styles.profileOverview}`}>
-					<h3>Your Profile</h3>
-				</div>
+				<DashboardCard styles={styles} heading='Recent Orders'>
+					{userData.orders.map((order) => (
+						<li key={order.id}>
+							Order #{order.id} - {order.status}
+						</li>
+					))}
+				</DashboardCard>
+
+				<DashboardCard styles={styles} heading='Favorite Items'>
+					{userData.favorites.map((item) => (
+						<li key={item.id}>
+							{item.name} - ${item.price}
+						</li>
+					))}
+				</DashboardCard>
+
+				<DashboardCard styles={styles} heading='Notifications'>
+					{userData.notifications.map((notification, index) => (
+						<li key={index} className={styles[notification.type]}>
+							{notification.message}
+						</li>
+					))}
+				</DashboardCard>
 
 				{/* Stats and Insights */}
 				<div className={`${styles.card} ${styles.stats}`}>

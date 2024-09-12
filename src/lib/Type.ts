@@ -40,3 +40,10 @@ export interface iSlide {
 	category: iCategory;
 	items: iItem[];
 }
+
+
+export interface iSidebarLink {
+	href: string;
+	icon: string;
+	text: string;
+}

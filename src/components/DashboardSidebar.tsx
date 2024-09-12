@@ -1,49 +1,28 @@
+import { iSidebarLink } from '@/lib/Type';
 import Link from 'next/link';
 import React from 'react';
 
 const DashboardSidebar: React.FC<any> = ({ styles }) => {
+	const sidebarLinks: iSidebarLink[] = [
+		{ href: '/endpoints/user/dashboard', icon: 'fas fa-tachometer-alt', text: 'Dashboard' },
+		{ href: '/endpoints/user/orders', icon: 'fas fa-clipboard-list', text: 'Orders' },
+		{ href: '/endpoints/user/profile', icon: 'fas fa-user', text: 'Profile' },
+		{ href: '/endpoints/user/favorites', icon: 'fas fa-heart', text: 'Favorites' },
+		{ href: '/endpoints/user/notification', icon: 'fas fa-bell', text: 'Notifications' },
+		{ href: '/endpoints/user/settings', icon: 'fas fa-cog', text: 'Settings' },
+		{ href: '/endpoints/user/support', icon: 'fas fa-question-circle', text: 'Support' },
+		{ href: '/endpoints/user/logout', icon: 'fas fa-sign-out-alt', text: 'Logout' },
+	];
+
 	return (
 		<ul className={styles.sidebarMenu}>
-			<li className={`${styles.sidebarMenuItem} ${styles.slideInLeft}`}>
-				<Link href='/endpoints/user/dashboard' className={styles.sidebarMenuLink}>
-					<i className='fas fa-tachometer-alt'></i> Dashboard
-				</Link>
-			</li>
-			<li className={`${styles.sidebarMenuItem} ${styles.slideInLeft}`}>
-				<Link href='/endpoints/user/orders' className={styles.sidebarMenuLink}>
-					<i className='fas fa-clipboard-list'></i> Orders
-				</Link>
-			</li>
-			<li className={`${styles.sidebarMenuItem} ${styles.slideInLeft}`}>
-				<Link href='/endpoints/user/profile' className={styles.sidebarMenuLink}>
-					<i className='fas fa-user'></i> Profile
-				</Link>
-			</li>
-			<li className={`${styles.sidebarMenuItem} ${styles.slideInLeft}`}>
-				<Link href='/endpoints/user/favorites' className={styles.sidebarMenuLink}>
-					<i className='fas fa-heart'></i> Favorites
-				</Link>
-			</li>
-			<li className={`${styles.sidebarMenuItem} ${styles.slideInLeft}`}>
-				<Link href='/endpoints/user/notification' className={styles.sidebarMenuLink}>
-					<i className='fas fa-bell'></i> Notifications
-				</Link>
-			</li>
-			<li className={`${styles.sidebarMenuItem} ${styles.slideInLeft}`}>
-				<Link href='/endpoints/user/settings' className={styles.sidebarMenuLink}>
-					<i className='fas fa-cog'></i> Settings
-				</Link>
-			</li>
-			<li className={`${styles.sidebarMenuItem} ${styles.slideInLeft}`}>
-				<Link href='/endpoints/user/support' className={styles.sidebarMenuLink}>
-					<i className='fas fa-question-circle'></i> Support
-				</Link>
-			</li>
-			<li className={`${styles.sidebarMenuItem} ${styles.slideInLeft}`}>
-				<Link href='/endpoints/user/logout' className={styles.sidebarMenuLink}>
-					<i className='fas fa-sign-out-alt'></i> Logout
-				</Link>
-			</li>
+			{sidebarLinks.map((link, index) => (
+				<li key={index} className={`${styles.sidebarMenuItem} ${styles.slideInLeft}`}>
+					<Link href={link.href} className={styles.sidebarMenuLink}>
+						<i className={link.icon}></i> {link.text}
+					</Link>
+				</li>
+			))}
 		</ul>
 	);
 };
