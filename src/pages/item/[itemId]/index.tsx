@@ -9,6 +9,7 @@ import { scrollNext, scrollPrev } from '@/components/ItemsBlock';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import SimilarItems from '../components/SimilarItems';
+import { updateCart } from '@/components/Header';
 
 const Page: React.FC = () => {
 	const router = useRouter();
@@ -23,29 +24,24 @@ const Page: React.FC = () => {
 	// function for setting cart
 	const setCartOnStorage = (e: FormEvent<HTMLFormElement>, item: iCartItem | undefined): void => {
 		e.preventDefault();
-		let cart: iCartItem[] = [];
-		if (localStorage.getItem('cart')) {
-			cart = JSON.parse(localStorage.getItem('cart') || '[]');
-		}
+		let cart: iCartItem[] = localStorage.getItem('cart')
+			? JSON.parse(localStorage.getItem('cart') || '[]')
+			: [];
 
 		if (!item) return;
 
-		const existing = cart.includes(item);
+		const existing = cart.find((cartItem) => cartItem.id === item.id);
 
 		// if item is already in cart, increase quantity
 		if (existing) {
-			cart = cart.map((cartItem) => {
-				if (cartItem.id === item.id) {
-					cartItem.quantity += item.quantity;
-					cartItem.total = (cartItem.quantity * parseInt(item.total)).toString();
-				}
-				return cartItem;
-			});
+			existing.quantity += item.quantity;
+			existing.total = (existing.quantity * parseInt(item.total)).toString();
 		} else {
 			cart.push(item);
 		}
 
-		localStorage.setItem('cart', JSON.stringify(cart));
+		window.localStorage.setItem('cart', JSON.stringify(cart));
+		updateCart();
 	};
 
 	return (

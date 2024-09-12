@@ -3,6 +3,7 @@ import CartTableRow from './components/cartTableRow';
 import Link from 'next/link';
 import { iProduct } from './types/types';
 import { useRouter } from 'next/router';
+import { updateCart } from '@/components/Header';
 
 const CartPage: React.FC = () => {
 	const router = useRouter();
@@ -32,6 +33,7 @@ const CartPage: React.FC = () => {
 		const newCart = cart.filter((product) => product.id !== id);
 		setCart(newCart);
 		localStorage.setItem('cart', JSON.stringify(newCart));
+		updateCart();
 	};
 
 	// edit button onclick
@@ -42,6 +44,7 @@ const CartPage: React.FC = () => {
 		setCart(newCart);
 
 		// the route to item/id page
+		updateCart();
 		router.push(`/item/${id}`);
 	};
 

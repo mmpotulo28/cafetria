@@ -1,9 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Updates from './Updates';
+import { iCartItem } from '@/lib/Type';
+
+export let updateCart = () => {};
 
 const Header: React.FC = () => {
+	// track cart
+	const [cart, setCart] = React.useState<iCartItem[]>([]);
+
+	useEffect(() => {
+		updateCart = () => {
+			const updatedCart = JSON.parse(window.localStorage.getItem('cart') || '[]');
+			setCart(updatedCart);
+		};
+
+		const initialCart = JSON.parse(window.localStorage.getItem('cart') || '[]');
+		setCart(initialCart);
+
+		window.addEventListener('storage', updateCart);
+
+		return () => {
+			window.removeEventListener('storage', updateCart);
+		};
+	}, []);
+
 	return (
 		<header>
 			<div className='top-nav slide-down'>
@@ -83,7 +105,7 @@ const Header: React.FC = () => {
 						<Link href='/cart' className='nav-link'>
 							<i className='fa fa-shopping-cart'></i>
 						</Link>
-						<p className='cart-count'>0</p>
+						<p className='cart-count'>{cart.length}</p>
 					</li>
 				</ul>
 				<span id='nav-line'></span>
