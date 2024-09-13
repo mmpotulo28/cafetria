@@ -2,6 +2,7 @@ import DashboardCard from '@/components/DashboardCard';
 import styles from '../styles.module.css';
 import UserLayout from '../UserLayout';
 import { items } from '@/lib/data';
+import UserDashStats from '@/components/UserDashStats';
 
 export default function UserDashboardPage() {
 	const userData = {
@@ -60,26 +61,7 @@ export default function UserDashboardPage() {
 				</DashboardCard>
 
 				{/* Stats and Insights */}
-				<div className={`${styles.card} ${styles.stats}`}>
-					<h3>Stats & Insights</h3>
-					<div className={styles.statsGrid}>
-						<div className={styles.stat}>
-							<i className='fas fa-shopping-cart'></i>
-							<h4>Orders</h4>
-							<p className={styles.statNumber}>0</p>
-						</div>
-						<div className={styles.stat}>
-							<i className='fas fa-heart'></i>
-							<h4>Favorite Items</h4>
-							<p className={styles.statNumber}>0</p>
-						</div>
-						<div className={styles.stat}>
-							<i className='fas fa-bell'></i>
-							<h4>Notifications</h4>
-							<p className={styles.statNumber}>0</p>
-						</div>
-					</div>
-				</div>
+				<UserDashStats styles={styles} />
 			</div>
 		</UserLayout>
 	);

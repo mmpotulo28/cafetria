@@ -16,7 +16,7 @@ const DashboardSidebar: React.FC<any> = ({ styles }) => {
 
 	return (
 		<ul className={styles.sidebarMenu}>
-			{sidebarLinks.map((link, index) => (
+			{sidebarLinks?.map((link: iSidebarLink, index: number) => (
 				<li key={index} className={`${styles.sidebarMenuItem} ${styles.slideInLeft}`}>
 					<Link href={link.href} className={styles.sidebarMenuLink}>
 						<i className={link.icon}></i> {link.text}

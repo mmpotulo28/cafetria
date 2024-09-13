@@ -1,5 +1,5 @@
 {
-	"cSpell.words": ["applepay", "appletiser", "Cafetria", "categ", "embla", "gpay"],
+	"cSpell.words": ["applepay", "appletiser", "Cafetria", "categ", "embla", "fanta", "gpay"],
 	"appService.zipIgnorePattern": ["node_modules{,/**}", ".vscode{,/**}"],
 	"appService.defaultWebAppToDeploy": "/subscriptions/e9f6bf45-aad2-404d-8c8a-0a61b5b1a84b/resourceGroups/Cafetria_group/providers/Microsoft.Web/sites/Cafetria",
 	"appService.deploySubpath": "."
