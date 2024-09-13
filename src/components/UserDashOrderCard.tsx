@@ -9,7 +9,7 @@ const UserDashOrderCard: React.FC<any> = ({
 }) => {
 	return (
 		<>
-			<div className={orderStyles.order}>
+			<div className={orderStyles.order + ' slide-in-left'}>
 				<div className={orderStyles.orderInfo}>
 					<h4>Order #{order.id}</h4>
 					<p>Number of Items: {order.items.length}</p>

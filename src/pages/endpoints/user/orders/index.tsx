@@ -131,7 +131,7 @@ export default function OrdersPage() {
 				<div className={orderStyles.orders}>
 					<h3>Orders</h3>
 					<div className={orderStyles.ordersGrid}>
-						{orders?.map((order: any, index: number) => (
+						{orders?.map((order: any) => (
 							<UserDashOrderCard
 								styles={styles}
 								orderStyles={orderStyles}

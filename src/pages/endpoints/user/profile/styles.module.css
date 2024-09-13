@@ -1,0 +1,175 @@
+.dashboardCards {
+	display: grid;
+	grid-template-columns: 65% 30%;
+	width: 100%;
+	padding: 0 10px;
+	max-width: 100%;
+	gap: 20px;
+}
+
+.dashboardCards .profileInfo {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	background-color: var(--tet-color);
+	padding: 20px;
+	border-radius: 10px;
+	gap: 20px;
+	position: relative;
+}
+
+.dashboardCards .profileInfo h3 {
+	font-size: 25px;
+	color: var(--prim-color);
+	margin-bottom: 10px;
+}
+
+.dashboardCards .profileInfo form {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	width: 100%;
+	gap: 20px;
+}
+
+.dashboardCards .profileInfo form .formGroup {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	gap: 5px;
+	align-items: flex-start;
+}
+
+.dashboardCards .profileInfo form .formGroup.socialLinks {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	width: 100%;
+	gap: 20px;
+	grid-column: 1 / -1;
+	padding: 0;
+	margin-top: 10px;
+}
+
+.dashboardCards .profileInfo form .formGroup.socialLinks h3 {
+	font-size: 20px;
+	color: var(--prim-color);
+	grid-column: 1 / -1;
+	text-align: center;
+	margin-bottom: -10px;
+}
+
+.dashboardCards .profileInfo form .formGroup.socialLinks .socialLink {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 0px;
+}
+
+.dashboardCards .profileInfo form .formGroup.socialLinks .socialLink input {
+	width: calc(100% - 20px);
+}
+
+.dashboardCards .profileInfo form .formGroup label {
+	font-size: 15px;
+	color: var(--forth-color);
+}
+
+.dashboardCards .profileInfo form .formGroup input {
+	padding: 10px;
+	border: 1px solid var(--forth-color);
+	border-radius: 5px;
+	width: calc(100% - 20px);
+	color: var(--forth-color);
+	outline: none;
+}
+
+.dashboardCards .profileInfo form .formGroup input:focus {
+	border: 1px solid var(--prim-color);
+	box-shadow: 2px 2px 5px var(--prim-color) !important;
+	color: var(--forth-color);
+}
+
+.dashboardCards .profileInfo form .formGroup input:hover {
+	box-shadow: 2px 2px 5px var(--forth-color);
+}
+
+.dashboardCards .profileInfo form .formGroup.buttons {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+	width: 100%;
+	grid-column: 1 / -1;
+	margin-top: 20px;
+	gap: 10px;
+}
+
+.dashboardCards .profileInfo form .formGroup.buttons button {
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	background-color: var(--forth-color);
+	color: var(--font-color);
+	font-size: 15px;
+	cursor: pointer;
+}
+
+.dashboardCards .profileInfo form .formGroup.buttons button:hover {
+	background-color: var(--prim-color);
+}
+
+.dashboardCards .profileBioRight {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	background-color: var(--tet-color);
+	padding: 20px;
+	max-width: calc(100% - 40px);
+	min-width: 250px;
+	border-radius: 10px;
+	gap: 20px;
+}
+
+.dashboardCards .profileBioRight h3 {
+	font-size: 20px;
+	color: var(--prim-color);
+	margin-bottom: 10px;
+}
+
+.dashboardCards .profileBioRight .profileImage {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-width: calc(100% - 20px);
+	min-height: 200px;
+	max-width: calc(100% - 20px);
+	max-height: 200px;
+	background-color: var(--forth-color);
+	border-radius: 10px;
+	padding: 10px;
+}
+
+.dashboardCards .profileBioRight .profileImage img {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: cover;
+	border-radius: 10px;
+	border-radius: 50%;
+}
+
+.dashboardCards .profileBioRight .profileBio .socialLinks {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	gap: 10px;
+}
+
+.dashboardCards .profileBioRight .profileBio .socialLinks i {
+	font-size: 20px;
+	color: var(--prim-color);
+	margin-right: 5px;
+}
