@@ -1,0 +1,81 @@
+.addItems {
+	padding: 20px;
+	margin-top: 150px;
+	scroll-margin: 20px;
+}
+
+.addItemsContainer {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px;
+	padding: 20px;
+	max-height: 82vh;
+	overflow: hidden;
+	max-width: 1000px;
+	margin: 0 auto;
+}
+
+.itemList {
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: repeat(auto-fill, 60px);
+	background-color: var(--tet-color);
+	padding: 20px;
+	box-shadow: inset 0 0 5px 0 grey;
+	border-radius: 10px;
+	gap: 10px;
+	max-height: 70vh;
+	overflow-y: auto;
+	scroll-padding: 20px;
+}
+.addItems button {
+	max-height: 40px;
+	background-color: var(--forth-color);
+	border: none;
+	border-radius: 10px;
+	padding: 5px 10px;
+	font-size: 19px;
+	color: var(--font-color);
+}
+
+.addItems button:hover {
+	background-color: grey;
+}
+
+.selectedItems {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	background-color: var(--tet-color);
+	padding: 20px;
+	box-shadow: inset 0 0 5px 0 grey;
+	border-radius: 10px;
+	gap: 10px;
+	max-height: 70vh;
+}
+
+.selectedItemsList {
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: repeat(auto-fill, 60px);
+	background-color: var(--tet-color);
+	gap: 10px;
+	height: 100%;
+	overflow-y: auto;
+}
+
+.response {
+	display: none;
+}
+
+.item {
+	display: flex;
+	flex-wrap: nowrap;
+	background-color: white;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 20px;
+	padding: 0px 10px;
+	border-radius: 10px;
+	min-height: 50px;
+}
