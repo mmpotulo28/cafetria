@@ -1,0 +1,13 @@
+.adminLayout {
+	display: flex;
+	flex-direction: row;
+	height: 100vh;
+	margin-top: 135px;
+}
+
+.mainContent {
+	flex: 1;
+	padding: 20px;
+	background-color: var(--bg-color);
+	overflow-y: auto;
+}
