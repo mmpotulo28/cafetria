@@ -11,55 +11,56 @@ import {
 	FaChartBar,
 	FaCog,
 } from "react-icons/fa";
+import Link from "next/link";
 
 const AdminSidebar: React.FC = () => {
 	return (
 		<div className={styles.sidebar}>
 			<ul className={styles.sidebarList}>
 				<li className={styles.sidebarItem}>
-					<a href="/admin/view-items">
+					<Link href="/endpoints/admin/view-items">
 						<FaBox /> View Items
-					</a>
+					</Link>
 				</li>
 				<li className={styles.sidebarItem}>
-					<a href="/admin/add-items">
+					<Link href="/endpoints/admin/add-items">
 						<FaPlus /> Add Items
-					</a>
+					</Link>
 				</li>
 				<li className={styles.sidebarItem}>
-					<a href="/admin/view-orders">
+					<Link href="/endpoints/admin/view-orders">
 						<FaClipboardList /> View Orders
-					</a>
+					</Link>
 				</li>
 				<li className={styles.sidebarItem}>
-					<a href="/admin/view-staff">
+					<Link href="/endpoints/admin/view-staff">
 						<FaUsers /> View Staff
-					</a>
+					</Link>
 				</li>
 				<li className={styles.sidebarItem}>
-					<a href="/admin/view-stock">
+					<Link href="/endpoints/admin/view-stock">
 						<FaWarehouse /> View Stock
-					</a>
+					</Link>
 				</li>
 				<li className={styles.sidebarItem}>
-					<a href="/admin/view-users">
+					<Link href="/endpoints/admin/view-users">
 						<FaUser /> View Users
-					</a>
+					</Link>
 				</li>
 				<li className={styles.sidebarItem}>
-					<a href="/admin/manage-categories">
+					<Link href="/endpoints/admin/manage-categories">
 						<FaTags /> Manage Categories
-					</a>
+					</Link>
 				</li>
 				<li className={styles.sidebarItem}>
-					<a href="/admin/reports">
+					<Link href="/endpoints/admin/reports">
 						<FaChartBar /> Reports
-					</a>
+					</Link>
 				</li>
 				<li className={styles.sidebarItem}>
-					<a href="/admin/settings">
+					<Link href="/endpoints/admin/settings">
 						<FaCog /> Settings
-					</a>
+					</Link>
 				</li>
 			</ul>
 		</div>

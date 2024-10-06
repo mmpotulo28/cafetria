@@ -4,17 +4,17 @@ import { iItem } from "@/lib/Type";
 
 const createItemsTable = async () => {
 	const createTableQuery = `
-    CREATE TABLE IF NOT EXISTS items (
-      id SERIAL PRIMARY KEY,
-      name VARCHAR(255) NOT NULL,
-      price DECIMAL(10, 2) NOT NULL,
-      status VARCHAR(50) NOT NULL,
-      img VARCHAR(255) NOT NULL,
-      recommended BOOLEAN NOT NULL,
-      category VARCHAR(100) NOT NULL,
-      description TEXT NOT NULL
-    );
-  `;
+	CREATE TABLE IF NOT EXISTS items (
+			id SERIAL PRIMARY KEY,
+			name VARCHAR(255) NOT NULL UNIQUE,
+			price DECIMAL(10, 2) NOT NULL,
+			status VARCHAR(50) NOT NULL,
+			img VARCHAR(255) NOT NULL,
+			recommended BOOLEAN NOT NULL,
+			category VARCHAR(100) NOT NULL,
+			description TEXT NOT NULL
+	);
+		`;
 
 	await pool.query(createTableQuery);
 };
@@ -28,14 +28,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			// Step 1: Create the items table if it does not exist
 			await createItemsTable();
 
-			// Step 2: Fetch existing item IDs from the database
-			const existingItemsResult = await pool.query("SELECT id FROM items");
-			const existingItemIds = new Set(
-				existingItemsResult.rows.map((item: { id: number }) => item.id),
+			// Step 2: Fetch existing item names from the database
+			const existingItemsResult = await pool.query("SELECT name FROM items");
+			const existingItemNames = new Set(
+				existingItemsResult.rows.map((item: { name: string }) => item.name),
 			);
 
 			// Step 3: Filter out items that already exist in the database
-			const newItems = items.filter((item) => !existingItemIds.has(item.id));
+			const newItems = items.filter((item) => !existingItemNames.has(item.name));
 
 			if (newItems.length === 0) {
 				return res.status(400).json({ message: "No new items to add" });
@@ -44,9 +44,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			// Step 4: Insert new items into the database
 			const promises = newItems.map((item) =>
 				pool.query(
-					"INSERT INTO items (id, name, price, status, img, recommended, category, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+					"INSERT INTO items (name, price, status, img, recommended, category, description) VALUES ($1, $2, $3, $4, $5, $6, $7)",
 					[
-						item.id,
 						item.name,
 						item.price,
 						item.status,
