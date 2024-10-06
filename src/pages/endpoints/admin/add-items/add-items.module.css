@@ -28,6 +28,7 @@
 	overflow-y: auto;
 	scroll-padding: 20px;
 }
+
 .addItems button {
 	max-height: 40px;
 	background-color: var(--forth-color);
@@ -78,4 +79,25 @@
 	padding: 0px 10px;
 	border-radius: 10px;
 	min-height: 50px;
+}
+
+.item img {
+	max-height: 40px;
+	width: auto;
+}
+
+.item:hover {
+	background-color: var(--forth-color);
+	color: var(--font-color);
+}
+
+.item input {
+	width: 25px;
+	height: 25px;
+	border-radius: 20px;
+	color: var(--prim-color);
+}
+
+.item input:focus {
+	outline: none;
 }
