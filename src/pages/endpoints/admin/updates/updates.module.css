@@ -1,0 +1,112 @@
+.adminUpdates {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	gap: 50px;
+	justify-content: center;
+}
+
+.adminUpdates h2 {
+	display: flex;
+	align-items: center;
+	background-color: var(--forth-color);
+	width: calc(100% - 40px);
+	min-height: 50px;
+	color: var(--font-color);
+	padding: 10px 20px;
+	border-radius: 10px;
+}
+
+.addUpdate {
+	display: flex;
+	gap: 20px;
+	flex-direction: column;
+	max-width: 350px;
+	min-width: 250px;
+	box-shadow: 2px 2px 4px 0 var(--forth-color);
+	padding: 20px;
+	border-radius: 10px;
+}
+
+.updateList {
+	display: flex;
+	gap: 20px;
+	flex-direction: column;
+	box-shadow: 2px 2px 4px 0 var(--forth-color);
+	padding: 20px;
+	border-radius: 10px;
+	overflow-y: auto;
+}
+
+.updateList table {
+	width: 100%;
+	border-collapse: collapse;
+	border: 1px solid var(--forth-color);
+}
+
+.updateList table thead tr {
+	background-color: var(--forth-color);
+	color: var(--font-color);
+}
+
+.updateList table thead tr th {
+	padding: 10px;
+	text-align: left;
+}
+
+.updateList table tbody tr:nth-child(odd) {
+	background-color: var(--sec-color);
+}
+
+.updateList table tbody tr td {
+	padding: 5px 10px;
+	text-align: left;
+}
+
+.updateList table tbody tr td:nth-child(1) {
+	min-width: 150px;
+}
+
+.updateList table tbody tr td button {
+	background-color: transparent;
+	border: none;
+	outline: none;
+	margin: 5px;
+	color: var(--prim-color);
+	font-size: 20px;
+}
+
+.editUpdate {
+}
+
+.inputs {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.inputs input {
+	padding: 5px 10px;
+	border-radius: 10px;
+	height: 30px;
+}
+
+.inputs button {
+	padding: 5px 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 10px;
+	height: 40px;
+	font-size: 17px;
+	background-color: black;
+	color: var(--font-color);
+}
+
+.popup {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: var(--font-color);
+}

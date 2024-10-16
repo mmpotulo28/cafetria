@@ -41,9 +41,15 @@ export interface iSlide {
 	items: iItem[];
 }
 
-
 export interface iSidebarLink {
 	href: string;
 	icon: string;
 	text: string;
+}
+
+export interface IUpdate {
+	id: number;
+	text: string;
+	author: string;
+	date: string;
 }

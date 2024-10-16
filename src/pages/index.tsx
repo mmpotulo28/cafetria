@@ -17,10 +17,8 @@ export default function Home() {
 					filterByValue='true'
 				/>
 			</section>
-
+			
 			<CategorySection />
-
-			{/* sponsors */}
 			<Sponsors />
 		</>
 	);
