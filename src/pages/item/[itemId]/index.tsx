@@ -94,7 +94,7 @@ const ItemPage: React.FC = () => {
 		<>
 			<Head>
 				<title>{item?.name} | View Item | Cafetria</title>
-				<link rel="icon" href={item.img} />
+				{item && item.img && <link rel="icon" href={item.img} />}
 			</Head>
 			<section className="view-item-block">
 				<ViewItemBlock onSubmit={setCartOnStorage} btnClass="" item={item} statusClass="" />
