@@ -20,7 +20,14 @@ const CheckoutPage: React.FC = () => {
 	}, []);
 
 	const createOrder = useCallback((): iOrder => {
-		const orderNum = Math.floor(1000 + Math.random() * 9000);
+		let orderNum;
+		if (typeof window !== "undefined" && window.crypto) {
+			const array = new Uint32Array(1);
+			window.crypto.getRandomValues(array);
+			orderNum = array[0];
+		} else {
+			orderNum = 1000000;
+		}
 		return {
 			id: orderNum,
 			username: "exampleUser",
