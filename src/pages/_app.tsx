@@ -7,7 +7,6 @@ import type { Metadata } from "next";
 import Layout from "./layout";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import { Providers } from "@/components/Provider";
 
 const metadata: Metadata = {
 	title: "Cafetria | Home",
@@ -38,11 +37,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 			</Head>
 
 			{/* main body content */}
-			<Providers>
-				<Layout>
-					<Component {...pageProps} />
-				</Layout>
-			</Providers>
+			<Layout>
+				<Component {...pageProps} />
+			</Layout>
 		</>
 	);
 };
