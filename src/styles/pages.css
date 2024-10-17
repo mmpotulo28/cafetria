@@ -101,6 +101,12 @@
 	gap: 15px;
 }
 
+.view-item-block .view-item .main-block .item-config #item-config-form .form-group {
+	display: flex;
+	flex-wrap: nowrap;
+	gap: 10px;
+}
+
 .view-item-block .view-item .main-block .item-config #item-config-form .form-group input {
 	inline-size: 50px;
 	font-size: inherit;
@@ -119,10 +125,10 @@
 }
 
 .view-item-block .view-item .main-block .item-config #item-config-form .form-group select {
-	block-size: 30px;
-	font-size: inherit;
+	block-size: 25px;
+	font-size: 17px;
 	border: none;
-	border-radius: 10px;
+	border-radius: 5px;
 	outline: none;
 }
 
@@ -435,7 +441,7 @@
 	font-size: 20px;
 }
 
-.checkout-sec .payment-cont .payment-option input[type='radio'] {
+.checkout-sec .payment-cont .payment-option input[type="radio"] {
 	appearance: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -449,7 +455,7 @@
 	margin: auto 0;
 }
 
-.checkout-sec .payment-cont .payment-option input[type='radio']:checked {
+.checkout-sec .payment-cont .payment-option input[type="radio"]:checked {
 	background-color: var(--prim-color);
 }
 

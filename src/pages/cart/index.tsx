@@ -63,9 +63,9 @@ const CartPage: React.FC = () => {
 				</thead>
 
 				<tbody>
-					{cart.map((product: iProduct, index) => (
+					{cart.map((product: iProduct) => (
 						<CartTableRow
-							key={index}
+							key={product.id}
 							editOnclick={editBtnClick}
 							delOnclick={delBtnClick}
 							product={product}

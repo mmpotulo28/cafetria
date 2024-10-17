@@ -5,6 +5,8 @@ import DomItem from "./DomItem";
 import { iItem, iItemsBlockProps } from "../lib/Type";
 import { filterByCategory, filterByRecommended, filterByStatus } from "../lib/utils";
 import useEmblaCarousel from "embla-carousel-react";
+import Cookies from "js-cookie";
+
 export let scrollPrev: () => void;
 export let scrollNext: () => void;
 
@@ -116,13 +118,20 @@ const ItemsBlock = ({ itemClassName, filterByChoice, filterByValue }: iItemsBloc
 			}
 			const data = await response.json();
 			setItems(data);
+			Cookies.set("items", JSON.stringify(data), { expires: 1 / 288 }); // 5 minutes
 		} catch (error) {
 			console.error("Error fetching items:", error);
 		}
 	};
 
 	useEffect(() => {
-		fetchItems();
+		const cookieItems = Cookies.get("items");
+		if (cookieItems) {
+			const parsedItems = JSON.parse(cookieItems);
+			setItems(parsedItems);
+		} else {
+			fetchItems();
+		}
 	}, []);
 
 	scrollPrev = useCallback(() => {

@@ -12,17 +12,16 @@ import { updateCart } from "@/components/Header";
 
 const dummyItem: iItem = {
 	id: 1001,
-	name: "Vetkoeks",
+	name: "Loading...",
 	price: "22.00",
 	status: "out-off-stock",
-	img: "vetkook-mince.jpg",
+	img: "placeholder-image.webp",
 	recommended: true,
 	category: "Fast Food",
-	description:
-		"Delicious vetkooks filled with mince. Perfectly fried to golden perfection and served with a side of tangy tomato sauce.",
+	description: "loading...",
 	options: {
-		name: "sauce",
-		opt: ["Chip Sauce", "BBQ", "Chilli", "Tomato", "None"],
+		name: "NA",
+		opt: ["NA", "None"],
 	},
 };
 
@@ -53,11 +52,15 @@ const ItemPage: React.FC = () => {
 	useEffect(() => {
 		if (items.length === 0) {
 			fetchItems();
-		} else if (itemId) {
+		}
+	}, [fetchItems, items.length]);
+
+	useEffect(() => {
+		if (itemId && items.length > 0) {
 			const itm = filterById(Number(itemId), items);
 			setItem(itm[0] || dummyItem);
 		}
-	}, [itemId, items, fetchItems]);
+	}, [itemId, items]);
 
 	const setCartOnStorage = useCallback(
 		(e: FormEvent<HTMLFormElement>, item: iCartItem | undefined): void => {
@@ -91,6 +94,7 @@ const ItemPage: React.FC = () => {
 		<>
 			<Head>
 				<title>{item?.name} | View Item | Cafetria</title>
+				<link rel="icon" href={item.img} />
 			</Head>
 			<section className="view-item-block">
 				<ViewItemBlock onSubmit={setCartOnStorage} btnClass="" item={item} statusClass="" />
