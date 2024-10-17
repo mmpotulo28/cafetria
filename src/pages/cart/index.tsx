@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import CartTableRow from "./components/cartTableRow";
 import Link from "next/link";
-import { iProduct } from "./types/types";
+import { iProduct } from "@/lib/Type";
 import { useRouter } from "next/router";
 import { updateCart } from "@/components/Header";
 

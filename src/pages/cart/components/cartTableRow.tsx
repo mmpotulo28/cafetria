@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { iCartTableRowProps } from "../types/types";
+import { iCartTableRowProps } from "@/lib/Type";
 
 const CartTableRow: React.FC<iCartTableRowProps> = ({ product, editOnclick, delOnclick }) => {
 	if (!product) {
