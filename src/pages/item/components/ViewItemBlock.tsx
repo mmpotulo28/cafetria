@@ -1,6 +1,6 @@
 import { iCartItem } from "@/lib/Type";
 import React from "react";
-import { ViewItemBlockProps } from "../types/types";
+import { ViewItemBlockProps } from "@/lib/Type";
 import Image from "next/image";
 
 const ViewItemBlock: React.FC<ViewItemBlockProps> = ({ item, btnClass, statusClass, onSubmit }) => {

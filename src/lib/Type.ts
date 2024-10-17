@@ -88,3 +88,10 @@ export interface iCartTableRowProps {
 	editOnclick: (e: React.MouseEvent<HTMLButtonElement>, id: number) => void;
 	delOnclick: (e: React.MouseEvent<HTMLButtonElement>, id: number) => void;
 }
+
+export interface ViewItemBlockProps {
+	item: iItem;
+	btnClass: string;
+	statusClass: string;
+	onSubmit: (e: React.FormEvent<HTMLFormElement>, item: iCartItem | undefined) => void;
+}
