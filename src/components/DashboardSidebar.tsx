@@ -1,17 +1,21 @@
-import { iSidebarLink } from '@/lib/Type';
-import Link from 'next/link';
-import React from 'react';
+import { iSidebarLink } from "@/lib/Type";
+import Link from "next/link";
+import React from "react";
 
-const DashboardSidebar: React.FC<any> = ({ styles }) => {
+interface DashboardSidebarProps {
+	styles: { readonly [key: string]: string };
+}
+
+const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ styles }) => {
 	const sidebarLinks: iSidebarLink[] = [
-		{ href: '/endpoints/user/dashboard', icon: 'fas fa-tachometer-alt', text: 'Dashboard' },
-		{ href: '/endpoints/user/orders', icon: 'fas fa-clipboard-list', text: 'Orders' },
-		{ href: '/endpoints/user/profile', icon: 'fas fa-user', text: 'Profile' },
-		{ href: '/endpoints/user/favorites', icon: 'fas fa-heart', text: 'Favorites' },
-		{ href: '/endpoints/user/notification', icon: 'fas fa-bell', text: 'Notifications' },
-		{ href: '/endpoints/user/settings', icon: 'fas fa-cog', text: 'Settings' },
-		{ href: '/endpoints/user/support', icon: 'fas fa-question-circle', text: 'Support' },
-		{ href: '/endpoints/user/logout', icon: 'fas fa-sign-out-alt', text: 'Logout' },
+		{ href: "/endpoints/user/dashboard", icon: "fas fa-tachometer-alt", text: "Dashboard" },
+		{ href: "/endpoints/user/orders", icon: "fas fa-clipboard-list", text: "Orders" },
+		{ href: "/endpoints/user/profile", icon: "fas fa-user", text: "Profile" },
+		{ href: "/endpoints/user/favorites", icon: "fas fa-heart", text: "Favorites" },
+		{ href: "/endpoints/user/notification", icon: "fas fa-bell", text: "Notifications" },
+		{ href: "/endpoints/user/settings", icon: "fas fa-cog", text: "Settings" },
+		{ href: "/endpoints/user/support", icon: "fas fa-question-circle", text: "Support" },
+		{ href: "/endpoints/user/logout", icon: "fas fa-sign-out-alt", text: "Logout" },
 	];
 
 	return (

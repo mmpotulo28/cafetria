@@ -1,4 +1,10 @@
-const DashboardCard: React.FC<any> = ({ styles, heading, children }) => {
+interface DashboardCardProps {
+	styles: { readonly [key: string]: string };
+	heading: string;
+	children: React.ReactNode;
+}
+
+const DashboardCard: React.FC<DashboardCardProps> = ({ styles, heading, children }) => {
 	return (
 		<div className={styles.card}>
 			<h3>{heading}</h3>

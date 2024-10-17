@@ -53,3 +53,23 @@ export interface IUpdate {
 	author: string;
 	date: string;
 }
+
+export interface iOrderItem {
+	id: number;
+	order_id: number;
+	item_id: number;
+	name: string;
+	quantity: number;
+	price: string;
+	image?: string;
+}
+
+export interface iOrder {
+	id: number;
+	username: string;
+	noofitems: number;
+	total: string;
+	date: string;
+	status: string;
+	items: iOrderItem[];
+}
