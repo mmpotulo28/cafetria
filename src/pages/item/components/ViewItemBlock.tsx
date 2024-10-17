@@ -13,7 +13,7 @@ const ViewItemBlock: React.FC<ViewItemBlockProps> = ({ item, btnClass, statusCla
 	const [extras, setExtras] = React.useState<string>(
 		`${selectedOption}, ${plastic ? "Plastic" : "No plastic"}`,
 	);
-	const [image, setImage] = React.useState<string>(item.img);
+	const [image, setImage] = React.useState<string>("placeholder-image.webp");
 	const [cartItem, setCartItem] = React.useState<iCartItem>();
 
 	React.useEffect(() => {
