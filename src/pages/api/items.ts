@@ -5,15 +5,16 @@ import { iItem } from "@/lib/Type";
 const createItemsTable = async () => {
 	const createTableQuery = `
 	CREATE TABLE IF NOT EXISTS items (
-			id SERIAL PRIMARY KEY,
-			name VARCHAR(255) NOT NULL UNIQUE,
-			price DECIMAL(10, 2) NOT NULL,
-			status VARCHAR(50) NOT NULL,
-			img VARCHAR(255) NOT NULL,
-			recommended BOOLEAN NOT NULL,
-			category VARCHAR(100) NOT NULL,
-			description TEXT NOT NULL
-	);
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    price DECIMAL(10, 2) NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    img VARCHAR(255) NOT NULL,
+    recommended BOOLEAN NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    description TEXT NOT NULL,
+    options JSON NOT NULL
+);
 		`;
 
 	await pool.query(createTableQuery);
@@ -44,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			// Step 4: Insert new items into the database
 			const promises = newItems.map((item) =>
 				pool.query(
-					"INSERT INTO items (name, price, status, img, recommended, category, description) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+					"INSERT INTO items (name, price, status, img, recommended, category, description, options) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
 					[
 						item.name,
 						item.price,
@@ -53,6 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 						item.recommended,
 						item.category,
 						item.description,
+						item.options,
 					],
 				),
 			);
