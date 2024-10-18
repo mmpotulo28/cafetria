@@ -10,6 +10,93 @@ import Cookies from "js-cookie";
 export let scrollPrev: () => void;
 export let scrollNext: () => void;
 
+const dummyData: iItem[] = [
+	{
+		id: 1,
+		name: "Loading...",
+		status: "out-of-stock",
+		category: "all",
+		recommended: true,
+		price: "",
+		img: "placeholder-image.webp",
+		description: "",
+		options: {
+			name: "",
+			opt: [],
+		},
+	},
+	{
+		id: 2,
+		name: "Loading...",
+		status: "out-of-stock",
+		category: "all",
+		recommended: true,
+		price: "",
+		img: "placeholder-image.webp",
+		description: "",
+		options: {
+			name: "",
+			opt: [],
+		},
+	},
+	{
+		id: 3,
+		name: "Loading...",
+		status: "out-of-stock",
+		category: "all",
+		recommended: true,
+		price: "",
+		img: "placeholder-image.webp",
+		description: "",
+		options: {
+			name: "",
+			opt: [],
+		},
+	},
+	{
+		id: 4,
+		name: "Loading...",
+		status: "out-of-stock",
+		category: "all",
+		recommended: true,
+		price: "",
+		img: "placeholder-image.webp",
+		description: "",
+		options: {
+			name: "",
+			opt: [],
+		},
+	},
+	{
+		id: 5,
+		name: "Loading...",
+		status: "out-of-stock",
+		category: "all",
+		recommended: true,
+		price: "",
+		img: "placeholder-image.webp",
+		description: "",
+		options: {
+			name: "",
+			opt: [],
+		},
+	},
+	{
+		id: 6,
+		name: "Loading...",
+		status: "out-of-stock",
+		category: "all",
+		recommended: true,
+		price: "",
+		img: "placeholder-image.webp",
+		description: "",
+		options: {
+			name: "",
+			opt: [],
+		},
+	},
+];
+
 const ItemsBlock = ({ itemClassName, filterByChoice, filterByValue }: iItemsBlockProps) => {
 	const [emblaRef, emblaApi] = useEmblaCarousel({
 		loop: false,
@@ -18,92 +105,7 @@ const ItemsBlock = ({ itemClassName, filterByChoice, filterByValue }: iItemsBloc
 		watchFocus: true,
 	});
 
-	const [items, setItems] = useState<iItem[]>([
-		{
-			id: 1,
-			name: "Loading...",
-			status: "out-of-stock",
-			category: "all",
-			recommended: true,
-			price: "",
-			img: "placeholder-image.webp",
-			description: "",
-			options: {
-				name: "",
-				opt: [],
-			},
-		},
-		{
-			id: 2,
-			name: "Loading...",
-			status: "out-of-stock",
-			category: "all",
-			recommended: true,
-			price: "",
-			img: "placeholder-image.webp",
-			description: "",
-			options: {
-				name: "",
-				opt: [],
-			},
-		},
-		{
-			id: 3,
-			name: "Loading...",
-			status: "out-of-stock",
-			category: "all",
-			recommended: true,
-			price: "",
-			img: "placeholder-image.webp",
-			description: "",
-			options: {
-				name: "",
-				opt: [],
-			},
-		},
-		{
-			id: 4,
-			name: "Loading...",
-			status: "out-of-stock",
-			category: "all",
-			recommended: true,
-			price: "",
-			img: "placeholder-image.webp",
-			description: "",
-			options: {
-				name: "",
-				opt: [],
-			},
-		},
-		{
-			id: 5,
-			name: "Loading...",
-			status: "out-of-stock",
-			category: "all",
-			recommended: true,
-			price: "",
-			img: "placeholder-image.webp",
-			description: "",
-			options: {
-				name: "",
-				opt: [],
-			},
-		},
-		{
-			id: 6,
-			name: "Loading...",
-			status: "out-of-stock",
-			category: "all",
-			recommended: true,
-			price: "",
-			img: "placeholder-image.webp",
-			description: "",
-			options: {
-				name: "",
-				opt: [],
-			},
-		},
-	]);
+	const [items, setItems] = useState<iItem[]>(dummyData);
 
 	const fetchItems = async () => {
 		try {
