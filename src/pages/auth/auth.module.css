@@ -1,0 +1,242 @@
+.form {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	justify-content: center;
+	align-items: center;
+	margin: 0px auto;
+	width: 100%;
+	text-align: center;
+	color: var(--forth-color);
+	background: white;
+	gap: 30px;
+}
+
+.form .leftGroup {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 0px auto;
+	width: 100%;
+	text-align: center;
+	padding: 20px 10px;
+}
+
+.form .rightGroup {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 0px;
+	width: 100%;
+	text-align: center;
+	background-color: var(--prim-color);
+	min-height: 100%;
+	border-radius: 50% 0 0 50%;
+	color: var(--font-color);
+	transition: all 0.3s ease-in-out;
+}
+
+.form .rightGroup button {
+	background-color: var(--forth-color);
+	color: var(--prim-color);
+	margin: 10px auto !important;
+}
+
+.formGroup {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 5px auto;
+	width: 100%;
+	text-align: left;
+}
+#loginForm {
+	min-width: 240px;
+}
+
+#loginForm .formGroup label {
+	margin-left: 15px;
+}
+
+.wrapper {
+	padding: 0;
+	margin: 20px auto;
+	background: var(--font-color);
+	border-radius: 10px;
+	text-align: center;
+	box-shadow: 0px 20px 35px rgba(0, 0, 0, 0.1);
+	color: var(--sec-color);
+	width: fit-content;
+	max-width: 600px;
+	overflow: hidden;
+}
+.wrapper h1 {
+	font-size: 2rem;
+	color: var(--prim-color);
+	margin-bottom: 1rem;
+}
+.wrapper form label {
+	margin-left: 20px;
+}
+.wrapper form input {
+	width: calc(100% - 20px);
+	padding: 6px 8px;
+	margin: 4px auto;
+	border-radius: 10px;
+	background: var(--font-color);
+	border: 1px solid #979797;
+	outline: none;
+	min-width: 200px;
+}
+.wrapper button {
+	font-size: 1rem;
+	width: 50%;
+	padding: 8px;
+	margin: 10px 0;
+	border-radius: 10px;
+	color: var(--prim-color);
+	border: none;
+	cursor: pointer;
+	outline: none;
+	background-color: var(--forth-color);
+	box-shadow: none;
+}
+.wrapper button:hover {
+	color: var(--prim-color);
+	background-color: var(--font-color);
+}
+.wrapper input:focus {
+	border: 1px solid var(--forth-color);
+	box-shadow: 2px 2px 4px var(--forth-color);
+}
+.wrapper .terms {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+	margin-top: 20px;
+	text-align: left;
+	gap: 10px;
+	width: 90%;
+	margin: 20px auto 10px auto;
+}
+.wrapper .terms input {
+	margin: 0px;
+	transform: scale(1.5);
+	vertical-align: middle;
+	cursor: pointer;
+	width: fit-content !important;
+	min-width: 20px !important;
+}
+.wrapper .terms label {
+	font-size: 0.9rem;
+	width: fit-content;
+}
+.wrapper .terms a {
+	text-decoration: none;
+	color: #236cf3;
+}
+.wrapper .login {
+	font-size: 0.8rem;
+	margin-top: 1rem;
+	color: #636363;
+}
+.wrapper .login a {
+	text-decoration: none;
+	color: #236cf3;
+}
+.wrapper .recover {
+	font-size: 0.8rem;
+	margin: 0;
+	color: #636363;
+	text-decoration: none;
+}
+.wrapper .recover a {
+	text-decoration: none;
+	color: #636363;
+}
+
+.socialLoginBtn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: linear-gradient(var(--font-color), var(--sec-color));
+	border-radius: 10px;
+	color: var(--prim-color);
+	font-size: 23px;
+	min-width: 50px;
+	aspect-ratio: 1/1;
+	box-shadow: 2px 2px 4px 0 var(--prim-color);
+	padding: 0;
+}
+
+.socialLoginBtn:hover {
+	background: linear-gradient(to left, var(--font-color), var(--sec-color));
+	font-size: 20px;
+}
+
+.socialLogin {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-top: -10px;
+	gap: 10px;
+	width: 100%;
+}
+
+.socialLogin .socialIcons {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: 15px;
+	width: 100%;
+	margin-top: 10px;
+}
+
+.socialLogin button {
+	background-color: var(--font-color);
+	color: var(--prim-color);
+	border: none;
+	border-radius: 10px;
+	padding: 5px !important;
+	box-shadow: 2px 2px 5px 0 var(--shadow-color);
+	min-width: 40px;
+	min-height: 40px;
+	max-width: 40px;
+	margin: 0;
+}
+
+@media screen and (max-width: 550px) {
+	.form {
+		grid-template-columns: 1fr;
+		margin-bottom: 20px;
+	}
+	.form .rightGroup {
+		background-color: transparent;
+		color: var(--prim-color);
+		margin: 0px;
+		border-radius: 0;
+	}
+	.form .leftGroup {
+		width: 100%;
+		margin-bottom: 0;
+		padding-bottom: 0;
+	}
+}
+
+.bodyContent {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 50px auto;
+	margin-top: 150px;
+	width: 100%;
+	min-height: 82vh;
+	text-align: center;
+	color: var(--forth-color);
+}
