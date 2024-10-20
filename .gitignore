@@ -40,3 +40,5 @@ next-env.d.ts
 # ENVIROMENT
 .env*
 .vercel
+
+package-lock.json
