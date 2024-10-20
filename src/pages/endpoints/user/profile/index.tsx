@@ -1,23 +1,65 @@
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import UserLayout from "../UserLayout";
-import styles from "../styles.module.css";
+// import styles from "../styles.module.css";
 import profileStyles from "./styles.module.css";
 
 export default function UserProfilePage() {
+	const [formData, setFormData] = useState({
+		name: "[User Name]",
+		email: "[User Email]",
+		phone: "[User Phone]",
+		address: "[User Address]",
+		city: "[User City]",
+		state: "[User State]",
+		zip: "[User Zip]",
+		country: "[User Country]",
+		facebook: "",
+		twitter: "",
+		instagram: "",
+		linkedin: "",
+		github: "",
+	});
+
+	useEffect(() => {
+		// Fetch user data from the server
+		const fetchUserData = async () => {
+			const response = await fetch("/api/user/profile");
+			const data = await response.json();
+			setFormData(data);
+		};
+
+		fetchUserData();
+
+		return () => {
+			// Cleanup
+		};
+	}, []);
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		setFormData((prevState) => ({
+			...prevState,
+			[name]: value,
+		}));
+	};
+
 	return (
 		<UserLayout>
-			<div className={styles.welcomeMessage}>
-				<h1>Welcome, [User Name]!</h1>
-				<p>Here&apos;s a quick overview of your account and recent activities.</p>
-			</div>
-
 			<div className={profileStyles.dashboardCards}>
 				<div className={profileStyles.profileInfo + " slide-in-left"}>
 					<h3>Profile Info</h3>
 					<form id="user-profile-form">
 						<div className={profileStyles.formGroup}>
 							<label htmlFor="name">Name</label>
-							<input type="text" name="name" id="name" value="[User Name]" required />
+							<input
+								type="text"
+								name="name"
+								id="name"
+								value={formData.name}
+								onChange={handleChange}
+								required
+							/>
 						</div>
 						<div className={profileStyles.formGroup}>
 							<label htmlFor="email">Email</label>
@@ -25,7 +67,8 @@ export default function UserProfilePage() {
 								type="email"
 								name="email"
 								id="email"
-								value="[User Email]"
+								value={formData.email}
+								onChange={handleChange}
 								required
 							/>
 						</div>
@@ -35,7 +78,8 @@ export default function UserProfilePage() {
 								type="tel"
 								name="phone"
 								id="phone"
-								value="[User Phone]"
+								value={formData.phone}
+								onChange={handleChange}
 								required
 							/>
 						</div>
@@ -45,13 +89,21 @@ export default function UserProfilePage() {
 								type="text"
 								name="address"
 								id="address"
-								value="[User Address]"
+								value={formData.address}
+								onChange={handleChange}
 								required
 							/>
 						</div>
 						<div className={profileStyles.formGroup}>
 							<label htmlFor="city">City</label>
-							<input type="text" name="city" id="city" value="[User City]" required />
+							<input
+								type="text"
+								name="city"
+								id="city"
+								value={formData.city}
+								onChange={handleChange}
+								required
+							/>
 						</div>
 						<div className={profileStyles.formGroup}>
 							<label htmlFor="state">State</label>
@@ -59,13 +111,21 @@ export default function UserProfilePage() {
 								type="text"
 								name="state"
 								id="state"
-								value="[User State]"
+								value={formData.state}
+								onChange={handleChange}
 								required
 							/>
 						</div>
 						<div className={profileStyles.formGroup}>
 							<label htmlFor="zip">Zip</label>
-							<input type="text" name="zip" id="zip" value="[User Zip]" required />
+							<input
+								type="text"
+								name="zip"
+								id="zip"
+								value={formData.zip}
+								onChange={handleChange}
+								required
+							/>
 						</div>
 						<div className={profileStyles.formGroup}>
 							<label htmlFor="country">Country</label>
@@ -73,7 +133,8 @@ export default function UserProfilePage() {
 								type="text"
 								name="country"
 								id="country"
-								value="[User Country]"
+								value={formData.country}
+								onChange={handleChange}
 								required
 							/>
 						</div>
@@ -85,7 +146,8 @@ export default function UserProfilePage() {
 									type="text"
 									name="facebook"
 									id="facebook"
-									value=""
+									value={formData.facebook}
+									onChange={handleChange}
 									placeholder="Facebook"
 								/>
 							</div>
@@ -95,7 +157,8 @@ export default function UserProfilePage() {
 									type="text"
 									name="twitter"
 									id="twitter"
-									value=""
+									value={formData.twitter}
+									onChange={handleChange}
 									placeholder="Twitter"
 								/>
 							</div>
@@ -105,7 +168,8 @@ export default function UserProfilePage() {
 									type="text"
 									name="instagram"
 									id="instagram"
-									value=""
+									value={formData.instagram}
+									onChange={handleChange}
 									placeholder="Instagram"
 								/>
 							</div>
@@ -115,7 +179,8 @@ export default function UserProfilePage() {
 									type="text"
 									name="linkedin"
 									id="linkedin"
-									value=""
+									value={formData.linkedin}
+									onChange={handleChange}
 									placeholder="LinkedIn"
 								/>
 							</div>
@@ -125,14 +190,15 @@ export default function UserProfilePage() {
 									type="text"
 									name="github"
 									id="github"
-									value=""
+									value={formData.github}
+									onChange={handleChange}
 									placeholder="Github"
 								/>
 							</div>
 						</div>
-						<div className={`${profileStyles.formGroup}`}>
-							<button>Save</button>
+						<div className={`${profileStyles.formGroup} ${profileStyles.buttons}`}>
 							<button>Cancel</button>
+							<button>Save</button>
 						</div>
 					</form>
 				</div>

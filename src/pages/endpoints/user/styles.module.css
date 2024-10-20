@@ -48,13 +48,21 @@
 }
 
 .welcomeMessage {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	padding: 20px;
 	border-radius: 8px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	margin-bottom: 20px;
 	color: var(--prim-color);
-	font-size: 18px;
+	font-size: 16px;
 	background-color: black;
+}
+
+.welcomeMessage img {
+	border-radius: 50%;
+	border: 2px solid var(--prim-color);
 }
 
 .dashboardCards {

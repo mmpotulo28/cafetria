@@ -47,9 +47,10 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	align-items: center;
+	align-items: flex-start;
 	margin: 5px auto;
-	width: 100%;
+	padding: 0 10px;
+	width: calc(100% - 20px);
 	text-align: left;
 }
 #loginForm {
@@ -57,7 +58,7 @@
 }
 
 #loginForm .formGroup label {
-	margin-left: 15px;
+	margin-left: 0px;
 }
 
 .wrapper {
@@ -78,7 +79,7 @@
 	margin-bottom: 1rem;
 }
 .wrapper form label {
-	margin-left: 20px;
+	margin-left: 00px;
 }
 .wrapper form input {
 	width: calc(100% - 20px);
@@ -239,4 +240,8 @@
 	min-height: 82vh;
 	text-align: center;
 	color: var(--forth-color);
+}
+
+.errorMessage {
+	color: red;
 }

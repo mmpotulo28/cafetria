@@ -7,11 +7,11 @@ import type { Metadata } from "next";
 import Layout from "./layout";
 import { AppProps } from "next/app";
 import Head from "next/head";
+import { SessionProvider } from "next-auth/react";
 
 const metadata: Metadata = {
 	title: "Cafetria | Home",
 	description: "Cafetria is a modern web app for ordering food online.",
-
 	category: "food",
 	creator: "Manelisi Mpotulo",
 	publisher: "Manelisi Mpotulo",
@@ -24,9 +24,9 @@ const metadata: Metadata = {
 	],
 };
 
-const MyApp = ({ Component, pageProps }: AppProps) => {
+const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
 	return (
-		<>
+		<SessionProvider session={session}>
 			<Head>
 				<title>{"Home | Cafeteria"}</title>
 				<meta name="description" content={metadata.description || ""} />
@@ -40,7 +40,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 			<Layout>
 				<Component {...pageProps} />
 			</Layout>
-		</>
+		</SessionProvider>
 	);
 };
 

@@ -3,10 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import Updates from "./Updates";
 import { iCartItem } from "@/lib/Type";
+import { useSession, signOut } from "next-auth/react";
 
 export let updateCart = () => {};
 
 const Header: React.FC = () => {
+	const { data: session } = useSession();
+
 	// track cart
 	const [cart, setCart] = React.useState<iCartItem[]>([]);
 
@@ -78,12 +81,21 @@ const Header: React.FC = () => {
 							<p className="nav-item-text">Account</p>
 						</Link>
 					</li>
-					<li className="nav-item">
-						<Link href="/auth/login" className="nav-link">
-							<i className="fa fa-user"></i>
-							<p className="nav-item-text">Login</p>
-						</Link>
-					</li>
+					{session ? (
+						<li className="nav-item">
+							<span onClick={() => signOut()} className="nav-link">
+								<i className="fa fa-sign-out-alt"></i>
+								<p className="nav-item-text">Logout</p>
+							</span>
+						</li>
+					) : (
+						<li className="nav-item">
+							<Link href="/auth/login" className="nav-link">
+								<i className="fa fa-user"></i>
+								<p className="nav-item-text">Login</p>
+							</Link>
+						</li>
+					)}
 					<li className="nav-item">
 						<Link href="#" className="nav-link">
 							<i className="fa fa-phone"></i>

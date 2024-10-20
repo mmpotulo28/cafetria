@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import styles from "../auth.module.css";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 const Signup: React.FC = () => {
 	const [username, setUsername] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
+	const [phoneNumber, setPhoneNumber] = useState("");
 	const [termsAccepted, setTermsAccepted] = useState(false);
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (password !== confirmPassword) {
 			alert("Passwords do not match!");
@@ -19,10 +23,32 @@ const Signup: React.FC = () => {
 			alert("You must accept the terms and conditions!");
 			return;
 		}
+
 		// Handle signup logic here
-		console.log("Username:", username);
-		console.log("Email:", email);
-		console.log("Password:", password);
+		const user = {
+			username,
+			email,
+			password,
+			first_name: firstName,
+			last_name: lastName,
+			phone_number: phoneNumber,
+			created_at: new Date().toISOString(),
+		};
+		const res = await fetch("/api/signup", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(user),
+		});
+
+		if (res.ok) {
+			// Automatically sign in the user after successful signup
+			await signIn("credentials", { email, password });
+		} else {
+			const errorData = await res.json();
+			alert(errorData.message || "Signup failed!");
+		}
 	};
 
 	return (
@@ -75,6 +101,39 @@ const Signup: React.FC = () => {
 								name="confirmPassword"
 								value={confirmPassword}
 								onChange={(e) => setConfirmPassword(e.target.value)}
+								required
+							/>
+						</div>
+						<div className={styles.formGroup}>
+							<label htmlFor="firstName">First Name:</label>
+							<input
+								type="text"
+								id="firstName"
+								name="firstName"
+								value={firstName}
+								onChange={(e) => setFirstName(e.target.value)}
+								required
+							/>
+						</div>
+						<div className={styles.formGroup}>
+							<label htmlFor="lastName">Last Name:</label>
+							<input
+								type="text"
+								id="lastName"
+								name="lastName"
+								value={lastName}
+								onChange={(e) => setLastName(e.target.value)}
+								required
+							/>
+						</div>
+						<div className={styles.formGroup}>
+							<label htmlFor="phoneNumber">Phone Number:</label>
+							<input
+								type="text"
+								id="phoneNumber"
+								name="phoneNumber"
+								value={phoneNumber}
+								onChange={(e) => setPhoneNumber(e.target.value)}
 								required
 							/>
 						</div>

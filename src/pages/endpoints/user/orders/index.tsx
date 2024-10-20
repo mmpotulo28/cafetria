@@ -16,7 +16,11 @@ const OrdersPage: React.FC = () => {
 		try {
 			const response = await fetch("/api/orders");
 			const data = await response.json();
-			setOrders(data);
+			const sortedOrders = data.sort(
+				(a: iOrder, b: iOrder) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+			);
+			const limitedOrders = sortedOrders.slice(0, 6);
+			setOrders(limitedOrders);
 		} catch (error) {
 			console.error("Error fetching orders:", error);
 		}
@@ -35,10 +39,6 @@ const OrdersPage: React.FC = () => {
 					setShowViewOrder={setShowViewOrder}
 				/>
 			)}
-			<div className={styles.welcomeMessage}>
-				<h1>Welcome, [User Name]!</h1>
-				<p>Here&apos;s a quick overview of your account and recent activities.</p>
-			</div>
 
 			<div className={styles.dashboardCards}>
 				<div className={orderStyles.orders}>

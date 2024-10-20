@@ -47,11 +47,6 @@ export default function UserDashboardPage() {
 
 	return (
 		<UserLayout>
-			<div className={styles.welcomeMessage}>
-				<h1>Welcome, [User Name]!</h1>
-				<p>Here&apos;s a quick overview of your account and recent activities.</p>
-			</div>
-
 			<div className={styles.dashboardCards}>
 				<DashboardCard styles={styles} heading="Recent Orders">
 					{orders.map((order) => (
