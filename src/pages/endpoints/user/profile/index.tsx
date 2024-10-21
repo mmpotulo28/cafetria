@@ -3,6 +3,7 @@ import Image from "next/image";
 import UserLayout from "../UserLayout";
 import profileStyles from "./styles.module.css";
 import { useSession } from "next-auth/react";
+import Cookies from "js-cookie";
 
 const initialState = {
 	username: "loading...",
@@ -21,7 +22,8 @@ const initialState = {
 	linkedin: "loading...",
 	github: "loading...",
 	avatar_url: "/images/logo.jpeg",
-	provider: "loading...",
+	login_provider: "loading...",
+	user_type: "customer",
 };
 
 type FormState = typeof initialState;
@@ -59,10 +61,24 @@ export default function UserProfilePage() {
 			const response = await fetch(`/api/user/profile?email=${session?.user?.email}`);
 			const data = await response.json();
 			dispatch({ type: "SET_FORM_DATA", data });
+
+			if (response.ok) {
+				setStatusMessage("");
+				// Cache the data with a 3-minute expiration
+				Cookies.set("userProfile", JSON.stringify(data), { expires: 1 / 48 });
+			} else {
+				setStatusMessage(data.error);
+				console.log("Failed to fetch user data:", data);
+			}
 		};
 
 		if (isUserLoggedIn && session.user?.email) {
-			fetchUserData();
+			const cachedData = Cookies.get("userProfile");
+			if (cachedData) {
+				dispatch({ type: "SET_FORM_DATA", data: JSON.parse(cachedData) });
+			} else {
+				fetchUserData();
+			}
 		}
 	}, [isUserLoggedIn, session?.user?.email]);
 
@@ -89,7 +105,7 @@ export default function UserProfilePage() {
 			instagram: formData.instagram,
 			linkedin: formData.linkedin,
 			github: formData.github,
-			login_provider: formData.provider || "unknown",
+			login_provider: formData.login_provider || "unknown",
 			avatar_url: formData.avatar_url,
 		};
 
@@ -106,6 +122,8 @@ export default function UserProfilePage() {
 			dispatch({ type: "SET_FORM_DATA", data });
 			setStatusMessage("Profile updated successfully!");
 			setIsEditing(false);
+			// Update the cache with the new data
+			Cookies.set("userProfile", JSON.stringify(data), { expires: 1 / 48 });
 		} else {
 			setStatusMessage("Failed to update profile");
 			console.log("Failed to update profile:", await response.json());
@@ -143,6 +161,18 @@ export default function UserProfilePage() {
 								name="last_name"
 								id="last_name"
 								value={formData.last_name}
+								onChange={handleChange}
+								disabled={!isEditing}
+								required
+							/>
+						</div>
+						<div className={profileStyles.formGroup}>
+							<label htmlFor="username">Username</label>
+							<input
+								type="text"
+								name="username"
+								id="username"
+								value={formData.username}
 								onChange={handleChange}
 								disabled={!isEditing}
 								required
@@ -230,6 +260,32 @@ export default function UserProfilePage() {
 								onChange={handleChange}
 								disabled={!isEditing}
 								required
+							/>
+						</div>
+						<div className={profileStyles.formGroup}>
+							<label htmlFor="provider">
+								Provider{" "}
+								<i
+									className={`fab fa-${formData.login_provider.toLowerCase()}`}></i>
+							</label>
+
+							<input
+								type="text"
+								name="login_provider"
+								id="login_provider"
+								value={formData.login_provider}
+								disabled={true}
+							/>
+						</div>
+						<div className={profileStyles.formGroup}>
+							<label htmlFor="user_type">User type</label>
+
+							<input
+								type="text"
+								name="user_type"
+								id="user_type"
+								value={formData.user_type}
+								disabled={true}
 							/>
 						</div>
 						<div className={`${profileStyles.formGroup} ${profileStyles.socialLinks}`}>

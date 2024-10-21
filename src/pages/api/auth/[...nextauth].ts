@@ -3,7 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import LinkedInProvider from "next-auth/providers/linkedin";
 import TwitterProvider from "next-auth/providers/twitter";
 import DiscordProvider from "next-auth/providers/discord";
-import NextAuth, { Session, TokenSet, User } from "next-auth";
+import NextAuth, { Account, Session, TokenSet, User } from "next-auth";
 
 export const authOptions = {
 	secret: process.env.NEXTAUTH_SECRET,
@@ -50,7 +50,15 @@ export const authOptions = {
 			}
 			return session;
 		},
-		async jwt({ token, user }: { token: TokenSet; user: User }) {
+		async jwt({
+			token,
+			user,
+			account,
+		}: {
+			token: TokenSet;
+			user: User;
+			account: Account | null;
+		}) {
 			// Include user.id and user.image in the token object
 			if (user) {
 				token.id = user.id;
@@ -88,7 +96,7 @@ export const authOptions = {
 						instagram: "NA",
 						linkedin: "NA",
 						github: "NA",
-						login_provider: "NA",
+						login_provider: account?.provider || "NA",
 						avatar_url: user.image || "NA",
 						user_type: "customer",
 					};

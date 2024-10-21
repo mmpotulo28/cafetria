@@ -311,6 +311,7 @@ ul {
 	display: flex;
 	flex-wrap: nowrap;
 	align-items: center;
+	cursor: pointer;
 }
 
 .main-nav .right-nav-items {

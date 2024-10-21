@@ -6,6 +6,7 @@ import UserDashOrderCard from "@/components/UserDashOrderCard";
 import { useState, useEffect, useCallback } from "react";
 import OrderView from "@/components/OrderView";
 import { iOrder } from "@/lib/Type";
+import Cookies from "js-cookie";
 
 const OrdersPage: React.FC = () => {
 	const [showViewOrder, setShowViewOrder] = useState<boolean>(false);
@@ -21,13 +22,19 @@ const OrdersPage: React.FC = () => {
 			);
 			const limitedOrders = sortedOrders.slice(0, 6);
 			setOrders(limitedOrders);
+			Cookies.set("orders", JSON.stringify(limitedOrders), { expires: 1 / 480 }); // 3 minutes
 		} catch (error) {
 			console.error("Error fetching orders:", error);
 		}
 	}, []);
 
 	useEffect(() => {
-		fetchOrders();
+		const cachedOrders = Cookies.get("orders");
+		if (cachedOrders) {
+			setOrders(JSON.parse(cachedOrders));
+		} else {
+			fetchOrders();
+		}
 	}, [fetchOrders]);
 
 	return (

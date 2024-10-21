@@ -4,6 +4,7 @@ import UserLayout from "../UserLayout";
 import { items } from "@/lib/data";
 import UserDashStats from "@/components/UserDashStats";
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 export default function UserDashboardPage() {
 	const userData = {
@@ -32,17 +33,23 @@ export default function UserDashboardPage() {
 	const [orders, setOrders] = useState(userData.orders);
 
 	useEffect(() => {
-		const fetchOrders = async () => {
-			try {
-				const response = await fetch("/api/orders");
-				const data = await response.json();
-				setOrders(data);
-			} catch (error) {
-				console.error("Error fetching orders:", error);
-			}
-		};
+		const cachedOrders = Cookies.get("orders");
+		if (cachedOrders) {
+			setOrders(JSON.parse(cachedOrders));
+		} else {
+			const fetchOrders = async () => {
+				try {
+					const response = await fetch("/api/orders");
+					const data = await response.json();
+					setOrders(data);
+					Cookies.set("orders", JSON.stringify(data), { expires: 1 / 48 }); // 3 minutes
+				} catch (error) {
+					console.error("Error fetching orders:", error);
+				}
+			};
 
-		fetchOrders();
+			fetchOrders();
+		}
 	}, []);
 
 	return (

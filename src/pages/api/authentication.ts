@@ -47,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			await client.query(
 				`INSERT INTO users (
 					email, username, first_name, last_name, phone_number, address, city, state, zip, country,
-					facebook, twitter, instagram, linkedin, github, login_provider, avatar_url, created_at
+					facebook, twitter, instagram, linkedin, github, login_provider, avatar_url, user_type, created_at
 				) VALUES (
 					$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, NOW()
 				)`,

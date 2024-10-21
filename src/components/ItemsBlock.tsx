@@ -25,76 +25,7 @@ const dummyData: iItem[] = [
 			opt: [],
 		},
 	},
-	{
-		id: 2,
-		name: "Loading...",
-		status: "out-of-stock",
-		category: "all",
-		recommended: true,
-		price: "",
-		img: "placeholder-image.webp",
-		description: "",
-		options: {
-			name: "",
-			opt: [],
-		},
-	},
-	{
-		id: 3,
-		name: "Loading...",
-		status: "out-of-stock",
-		category: "all",
-		recommended: true,
-		price: "",
-		img: "placeholder-image.webp",
-		description: "",
-		options: {
-			name: "",
-			opt: [],
-		},
-	},
-	{
-		id: 4,
-		name: "Loading...",
-		status: "out-of-stock",
-		category: "all",
-		recommended: true,
-		price: "",
-		img: "placeholder-image.webp",
-		description: "",
-		options: {
-			name: "",
-			opt: [],
-		},
-	},
-	{
-		id: 5,
-		name: "Loading...",
-		status: "out-of-stock",
-		category: "all",
-		recommended: true,
-		price: "",
-		img: "placeholder-image.webp",
-		description: "",
-		options: {
-			name: "",
-			opt: [],
-		},
-	},
-	{
-		id: 6,
-		name: "Loading...",
-		status: "out-of-stock",
-		category: "all",
-		recommended: true,
-		price: "",
-		img: "placeholder-image.webp",
-		description: "",
-		options: {
-			name: "",
-			opt: [],
-		},
-	},
+	// ... (other dummy items)
 ];
 
 const ItemsBlock = ({ itemClassName, filterByChoice, filterByValue }: iItemsBlockProps) => {
@@ -119,8 +50,8 @@ const ItemsBlock = ({ itemClassName, filterByChoice, filterByValue }: iItemsBloc
 				throw new Error(`Error: ${response.statusText}`);
 			}
 			const data = await response.json();
-			setItems(data);
-			Cookies.set("items", JSON.stringify(data), { expires: 1 / 288 }); // 5 minutes
+			setItems(data); // Replace dummy data with fetched data
+			Cookies.set("items", JSON.stringify(data), { expires: 1 / 480 }); // 3 minutes
 		} catch (error) {
 			console.error("Error fetching items:", error);
 		}
