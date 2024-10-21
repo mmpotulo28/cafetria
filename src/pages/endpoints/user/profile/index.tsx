@@ -1,47 +1,124 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import Image from "next/image";
 import UserLayout from "../UserLayout";
-// import styles from "../styles.module.css";
 import profileStyles from "./styles.module.css";
+import { useSession } from "next-auth/react";
+
+const initialState = {
+	username: "loading...",
+	first_name: "loading...",
+	last_name: "loading...",
+	email: "loading...",
+	phone_number: "loading...",
+	address: "loading...",
+	city: "loading...",
+	state: "loading...",
+	zip: "loading...",
+	country: "loading...",
+	facebook: "loading...",
+	twitter: "loading...",
+	instagram: "loading...",
+	linkedin: "loading...",
+	github: "loading...",
+	avatar_url: "/images/logo.jpeg",
+	provider: "loading...",
+};
+
+type FormState = typeof initialState;
+type FormAction =
+	| { type: "SET_FIELD"; field: string; value: string }
+	| { type: "SET_FORM_DATA"; data: Partial<FormState> };
+
+function formReducer(state: FormState, action: FormAction) {
+	switch (action.type) {
+		case "SET_FIELD":
+			return {
+				...state,
+				[action.field]: action.value,
+			};
+		case "SET_FORM_DATA":
+			return {
+				...state,
+				...action.data,
+			};
+		default:
+			return state;
+	}
+}
 
 export default function UserProfilePage() {
-	const [formData, setFormData] = useState({
-		name: "[User Name]",
-		email: "[User Email]",
-		phone: "[User Phone]",
-		address: "[User Address]",
-		city: "[User City]",
-		state: "[User State]",
-		zip: "[User Zip]",
-		country: "[User Country]",
-		facebook: "",
-		twitter: "",
-		instagram: "",
-		linkedin: "",
-		github: "",
-	});
+	const [formData, dispatch] = useReducer(formReducer, initialState);
+	const [isEditing, setIsEditing] = useState(false);
+	const [statusMessage, setStatusMessage] = useState("");
+
+	const { data: session, status } = useSession();
+	const isUserLoggedIn = status === "authenticated";
 
 	useEffect(() => {
-		// Fetch user data from the server
 		const fetchUserData = async () => {
-			const response = await fetch("/api/user/profile");
+			const response = await fetch(`/api/user/profile?email=${session?.user?.email}`);
 			const data = await response.json();
-			setFormData(data);
+			dispatch({ type: "SET_FORM_DATA", data });
 		};
 
-		fetchUserData();
-
-		return () => {
-			// Cleanup
-		};
-	}, []);
+		if (isUserLoggedIn && session.user?.email) {
+			fetchUserData();
+		}
+	}, [isUserLoggedIn, session?.user?.email]);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
-		setFormData((prevState) => ({
-			...prevState,
-			[name]: value,
-		}));
+		dispatch({ type: "SET_FIELD", field: name, value });
+	};
+
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		setStatusMessage("Saving...");
+		const updatedData = {
+			username: formData.username,
+			first_name: formData.first_name,
+			last_name: formData.last_name,
+			phone_number: formData.phone_number,
+			address: formData.address,
+			city: formData.city,
+			state: formData.state,
+			zip: formData.zip,
+			country: formData.country,
+			facebook: formData.facebook,
+			twitter: formData.twitter,
+			instagram: formData.instagram,
+			linkedin: formData.linkedin,
+			github: formData.github,
+			login_provider: formData.provider || "unknown",
+			avatar_url: formData.avatar_url,
+		};
+
+		const response = await fetch(`/api/user/profile?email=${session?.user?.email}`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(updatedData),
+		});
+
+		if (response.ok) {
+			const data = await response.json();
+			dispatch({ type: "SET_FORM_DATA", data });
+			setStatusMessage("Profile updated successfully!");
+			setIsEditing(false);
+		} else {
+			setStatusMessage("Failed to update profile");
+			console.log("Failed to update profile:", await response.json());
+		}
+	};
+
+	const handleEdit = () => {
+		setIsEditing(true);
+	};
+
+	const handleCancel = () => {
+		setIsEditing(false);
+		setStatusMessage("");
 	};
 
 	return (
@@ -49,15 +126,25 @@ export default function UserProfilePage() {
 			<div className={profileStyles.dashboardCards}>
 				<div className={profileStyles.profileInfo + " slide-in-left"}>
 					<h3>Profile Info</h3>
-					<form id="user-profile-form">
+					<form id="user-profile-form" onSubmit={handleSubmit}>
 						<div className={profileStyles.formGroup}>
 							<label htmlFor="name">Name</label>
 							<input
 								type="text"
-								name="name"
-								id="name"
-								value={formData.name}
+								name="first_name"
+								id="first_name"
+								value={formData.first_name}
 								onChange={handleChange}
+								disabled={!isEditing}
+								required
+							/>
+							<input
+								type="text"
+								name="last_name"
+								id="last_name"
+								value={formData.last_name}
+								onChange={handleChange}
+								disabled={!isEditing}
 								required
 							/>
 						</div>
@@ -69,6 +156,7 @@ export default function UserProfilePage() {
 								id="email"
 								value={formData.email}
 								onChange={handleChange}
+								disabled={true}
 								required
 							/>
 						</div>
@@ -76,10 +164,11 @@ export default function UserProfilePage() {
 							<label htmlFor="phone">Phone</label>
 							<input
 								type="tel"
-								name="phone"
-								id="phone"
-								value={formData.phone}
+								name="phone_number"
+								id="phone_number"
+								value={formData.phone_number}
 								onChange={handleChange}
+								disabled={!isEditing}
 								required
 							/>
 						</div>
@@ -91,6 +180,7 @@ export default function UserProfilePage() {
 								id="address"
 								value={formData.address}
 								onChange={handleChange}
+								disabled={!isEditing}
 								required
 							/>
 						</div>
@@ -102,6 +192,7 @@ export default function UserProfilePage() {
 								id="city"
 								value={formData.city}
 								onChange={handleChange}
+								disabled={!isEditing}
 								required
 							/>
 						</div>
@@ -113,6 +204,7 @@ export default function UserProfilePage() {
 								id="state"
 								value={formData.state}
 								onChange={handleChange}
+								disabled={!isEditing}
 								required
 							/>
 						</div>
@@ -124,6 +216,7 @@ export default function UserProfilePage() {
 								id="zip"
 								value={formData.zip}
 								onChange={handleChange}
+								disabled={!isEditing}
 								required
 							/>
 						</div>
@@ -135,6 +228,7 @@ export default function UserProfilePage() {
 								id="country"
 								value={formData.country}
 								onChange={handleChange}
+								disabled={!isEditing}
 								required
 							/>
 						</div>
@@ -148,6 +242,7 @@ export default function UserProfilePage() {
 									id="facebook"
 									value={formData.facebook}
 									onChange={handleChange}
+									disabled={!isEditing}
 									placeholder="Facebook"
 								/>
 							</div>
@@ -159,6 +254,7 @@ export default function UserProfilePage() {
 									id="twitter"
 									value={formData.twitter}
 									onChange={handleChange}
+									disabled={!isEditing}
 									placeholder="Twitter"
 								/>
 							</div>
@@ -170,6 +266,7 @@ export default function UserProfilePage() {
 									id="instagram"
 									value={formData.instagram}
 									onChange={handleChange}
+									disabled={!isEditing}
 									placeholder="Instagram"
 								/>
 							</div>
@@ -181,6 +278,7 @@ export default function UserProfilePage() {
 									id="linkedin"
 									value={formData.linkedin}
 									onChange={handleChange}
+									disabled={!isEditing}
 									placeholder="LinkedIn"
 								/>
 							</div>
@@ -192,24 +290,36 @@ export default function UserProfilePage() {
 									id="github"
 									value={formData.github}
 									onChange={handleChange}
+									disabled={!isEditing}
 									placeholder="Github"
 								/>
 							</div>
 						</div>
 						<div className={`${profileStyles.formGroup} ${profileStyles.buttons}`}>
-							<button>Cancel</button>
-							<button>Save</button>
+							{isEditing ? (
+								<>
+									<button type="button" onClick={handleCancel}>
+										Cancel
+									</button>
+									<button type="submit">Save</button>
+								</>
+							) : (
+								<button type="button" onClick={handleEdit}>
+									Edit
+								</button>
+							)}
 						</div>
 					</form>
+					{statusMessage && <p>{statusMessage}</p>}
 				</div>
 
 				<div className={`${profileStyles.profileBioRight} slide-in`}>
 					<div className={profileStyles.profileImage}>
 						<Image
-							src="/images/logo.jpeg"
+							src={formData.avatar_url}
 							alt="User Profile Image"
-							width={100}
-							height={100}
+							width={150}
+							height={150}
 						/>
 					</div>
 
@@ -218,23 +328,45 @@ export default function UserProfilePage() {
 							<h3>Social Links</h3>
 							<div className={profileStyles.socialLink}>
 								<i className="fab fa-facebook"></i>
-								<a href="#">Facebook</a>
+								<a
+									href={formData.facebook}
+									target="_blank"
+									rel="noopener noreferrer">
+									Facebook
+								</a>
 							</div>
 							<div className={profileStyles.socialLink}>
 								<i className="fab fa-twitter"></i>
-								<a href="#">Twitter</a>
+								<a
+									href={formData.twitter}
+									target="_blank"
+									rel="noopener noreferrer">
+									Twitter
+								</a>
 							</div>
 							<div className={profileStyles.socialLink}>
 								<i className="fab fa-instagram"></i>
-								<a href="#">Instagram</a>
+								<a
+									href={formData.instagram}
+									target="_blank"
+									rel="noopener noreferrer">
+									Instagram
+								</a>
 							</div>
 							<div className={profileStyles.socialLink}>
 								<i className="fab fa-linkedin"></i>
-								<a href="#">LinkedIn</a>
+								<a
+									href={formData.linkedin}
+									target="_blank"
+									rel="noopener noreferrer">
+									LinkedIn
+								</a>
 							</div>
 							<div className={profileStyles.socialLink}>
 								<i className="fab fa-github"></i>
-								<a href="#">GitHub</a>
+								<a href={formData.github} target="_blank" rel="noopener noreferrer">
+									GitHub
+								</a>
 							</div>
 						</div>
 					</div>
