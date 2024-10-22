@@ -10,16 +10,7 @@ const CartPage: React.FC = () => {
 	const [cart, setCart] = React.useState<iProduct[]>([]);
 	useEffect(() => {
 		// dummy cart data
-		const cartItems: iProduct[] = [
-			{
-				id: 0,
-				image: "/images/applepay.jpg",
-				name: "Empty Cart",
-				extras: "NA",
-				quantity: 0,
-				total: "R00.00",
-			},
-		];
+		const cartItems: iProduct[] = [];
 
 		// get cart from localStorage
 		setCart(JSON.parse(localStorage.getItem("cart") || JSON.stringify(cartItems)));

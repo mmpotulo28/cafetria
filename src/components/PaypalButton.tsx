@@ -9,17 +9,18 @@ import {
 import { iOrder } from "../lib/Type";
 import { useRouter } from "next/router";
 
-interface Name {
-	givenName: string;
-	surname: string;
-}
-
 interface Address {
 	addressLine1?: string;
+	addressLine2?: string;
 	adminArea2?: string;
 	adminArea1?: string;
 	postalCode?: string;
 	countryCode: string;
+}
+
+interface Name {
+	givenName: string;
+	surname: string;
 }
 
 interface PayPal {
@@ -104,82 +105,55 @@ interface OrderData {
 interface SubmitPaymentProps {
 	isPaying: boolean;
 	setIsPaying: React.Dispatch<React.SetStateAction<boolean>>;
-	billingAddress: {
-		addressLine1: string;
-		addressLine2: string;
-		adminArea1: string;
-		adminArea2: string;
-		countryCode: string;
-		postalCode: string;
-	};
+	billingAddress?: Address;
 }
 
 const PaypalButton: React.FC<{ cart: iOrder }> = ({ cart }) => {
 	const router = useRouter();
 	const [isPaying, setIsPaying] = useState(false);
 	const [message, setMessage] = useState("");
+	// const [billingAddress] = useState<Address>({
+	// 	addressLine1: "",
+	// 	adminArea1: "",
+	// 	adminArea2: "",
+	// 	countryCode: "",
+	// 	postalCode: "",
+	// });
+
 	const initialOptions = {
 		clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "sb",
-		"client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "sb",
 		"enable-funding": "venmo,paylater,card",
-		enableFunding: "venmo,paylater,card",
 		"buyer-country": "SA",
-		buyerCountry: "SA",
 		currency: "USD",
 		components: "buttons,hosted-fields,card-fields",
 	};
 
-	const [billingAddress, setBillingAddress] = useState({
-		addressLine1: "",
-		addressLine2: "",
-		adminArea1: "",
-		adminArea2: "",
-		countryCode: "",
-		postalCode: "",
-	});
+	// const handleBillingAddressChange = (field: keyof Address, value: string) => {
+	// 	setBillingAddress((prev) => ({
+	// 		...prev,
+	// 		[field]: value,
+	// 	}));
+	// };
 
-	function handleBillingAddressChange(field: string, value: string) {
-		setBillingAddress((prev) => ({
-			...prev,
-			[field]: value,
-		}));
-	}
-
-	async function createOrder() {
+	const createOrder = async () => {
 		try {
 			const response = await fetch("/api/orders", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify(
-					cart || {
-						items: [
-							{
-								item_id: 121,
-								name: "Item Name",
-								quantity: 1,
-								price: 10.0 / 18.0,
-							},
-						],
-						total: 10.0 / 18.0,
-					},
-				),
+				body: JSON.stringify(cart),
 			});
 
 			const orderData = await response.json();
-			console.log("Order data:", orderData);
-
-			console.log("FrontENd Order Data ID:", orderData.orderData);
-
 			return orderData.orderData.result.id;
 		} catch (error) {
 			console.error("Error creating order:", error);
 			throw new Error(`Could not initiate PayPal Checkout.: ${error}`);
 		}
-	}
+	};
 
-	async function onApprove(data: { orderID: unknown }) {
+	const onApprove = async (data: { orderID: string }) => {
 		try {
 			const response = await fetch(`/api/orders/${data.orderID}/capture`, {
 				method: "POST",
@@ -189,18 +163,13 @@ const PaypalButton: React.FC<{ cart: iOrder }> = ({ cart }) => {
 			});
 
 			const orderData: { result: OrderData } = await response.json();
-			console.log("Capture result:", orderData);
-			const transaction: Capture = orderData.result.purchaseUnits[0].payments.captures[0];
-			console.log("Transaction: ", transaction);
+			const transaction = orderData.result.purchaseUnits[0].payments.captures[0];
 
 			if (!transaction || transaction.status === "DECLINED") {
-				console.log("Failed Transaction details:", orderData.result);
 				setMessage("Transaction was not successful.");
 			} else {
 				setMessage(`Transaction ${transaction.status}: ${transaction.id}`);
-				// Clear the cart
 				clearCart();
-				// Redirect after 2 seconds
 				setTimeout(() => {
 					router.push("/endpoints/user/orders");
 				}, 2000);
@@ -209,21 +178,16 @@ const PaypalButton: React.FC<{ cart: iOrder }> = ({ cart }) => {
 			console.error("Error capturing order:", error);
 			setMessage((error as Error).message);
 		}
-	}
+	};
 
-	function onError(error: unknown) {
+	const onError = (error: unknown) => {
 		console.error("PayPal Checkout onError", error);
-		if (error instanceof Error) {
-			setMessage(error.message);
-		} else {
-			setMessage(String(error));
-		}
-	}
+		setMessage(error instanceof Error ? error.message : String(error));
+	};
 
-	function clearCart() {
+	const clearCart = () => {
 		localStorage.removeItem("cart");
-		console.log("Cart Cleared");
-	}
+	};
 
 	return (
 		<div className="card_container">
@@ -234,55 +198,71 @@ const PaypalButton: React.FC<{ cart: iOrder }> = ({ cart }) => {
 					onError={onError}
 					style={{
 						shape: "sharp",
-						layout: "horizontal",
+						layout: "vertical",
 						color: "silver",
-						label: "paypal",
+						label: "checkout",
 					}}
 				/>
 
 				<PayPalCardFieldsProvider
-					onError={(error) => console.error("PayPal Card Fields onError", error)}
 					createOrder={createOrder}
-					onApprove={onApprove}>
+					onApprove={onApprove}
+					onError={onError}
+					style={{
+						input: {
+							color: "black",
+						},
+						label: {
+							color: "black",
+							"font-size": "16px",
+						},
+						fields: {},
+					}}>
 					<PayPalCardFieldsForm />
-
-					{/* Billing Address Inputs */}
-					<input
+					{/* <input
 						type="text"
+						id="card-billing-address-line-2"
+						name="card-billing-address-line-2"
 						placeholder="Address line 1"
 						onChange={(e) => handleBillingAddressChange("addressLine1", e.target.value)}
 					/>
 					<input
 						type="text"
+						id="card-billing-address-line-2"
+						name="card-billing-address-line-2"
 						placeholder="Address line 2"
 						onChange={(e) => handleBillingAddressChange("addressLine2", e.target.value)}
 					/>
 					<input
 						type="text"
+						id="card-billing-address-admin-area-line-1"
+						name="card-billing-address-admin-area-line-1"
 						placeholder="Admin area line 1"
 						onChange={(e) => handleBillingAddressChange("adminArea1", e.target.value)}
 					/>
 					<input
 						type="text"
+						id="card-billing-address-admin-area-line-2"
+						name="card-billing-address-admin-area-line-2"
 						placeholder="Admin area line 2"
 						onChange={(e) => handleBillingAddressChange("adminArea2", e.target.value)}
 					/>
 					<input
 						type="text"
+						id="card-billing-address-country-code"
+						name="card-billing-address-country-code"
 						placeholder="Country code"
 						onChange={(e) => handleBillingAddressChange("countryCode", e.target.value)}
 					/>
 					<input
 						type="text"
+						id="card-billing-address-postal-code"
+						name="card-billing-address-postal-code"
 						placeholder="Postal/zip code"
 						onChange={(e) => handleBillingAddressChange("postalCode", e.target.value)}
-					/>
-
-					<SubmitPayment
-						isPaying={isPaying}
-						setIsPaying={setIsPaying}
-						billingAddress={billingAddress}
-					/>
+					/> */}
+					{/* Custom client component to handle card fields submission */}
+					<SubmitPayment isPaying={isPaying} setIsPaying={setIsPaying} />
 				</PayPalCardFieldsProvider>
 			</PayPalScriptProvider>
 			{message && <Message content={message} />}

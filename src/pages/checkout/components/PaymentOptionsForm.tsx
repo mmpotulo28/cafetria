@@ -1,9 +1,9 @@
 import Image from "next/image";
 import React from "react";
 
-const PaymentOptionsForm: React.FC = () => {
-	const [, setPaymentOption] = React.useState<string>("credit-card");
-
+const PaymentOptionsForm: React.FC<{
+	setPaymentOption: React.Dispatch<React.SetStateAction<string>>;
+}> = ({ setPaymentOption }) => {
 	const handlePaymentOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setPaymentOption(e.target.value);
 	};
@@ -70,7 +70,6 @@ const PaymentOptionsForm: React.FC = () => {
 						<p>Apple Pay</p>
 					</label>
 				</div>
-				<button type="submit">Pay</button>
 			</form>
 		</div>
 	);

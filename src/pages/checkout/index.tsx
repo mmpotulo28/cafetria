@@ -7,11 +7,12 @@ import { items } from "@/lib/data";
 import Sponsors from "@/components/Sponsors";
 import PersonalInfoForm from "./components/PersonalInfoForm";
 import OrderSummary from "./components/OrderSummary";
-// import PaymentOptionsForm from "./components/PaymentOptionsForm";
+import PaymentOptionsForm from "./components/PaymentOptionsForm";
 import { iCartItem, iOrder } from "@/lib/Type";
 import PaypalButton from "@/components/PaypalButton";
 
 const CheckoutPage: React.FC = () => {
+	const [paymentOption, setPaymentOption] = useState("credit-card");
 	const { data: session } = useSession();
 	const [cart, setCart] = useState<iCartItem[]>([]);
 	const [, setUserData] = useState({
@@ -84,10 +85,13 @@ const CheckoutPage: React.FC = () => {
 			<section className="checkout-sec">
 				<PersonalInfoForm />
 				<OrderSummary />
-				{/* <PaymentOptionsForm /> */}
-				{formattedCart && <PaypalButton cart={formattedCart} />}
+				<PaymentOptionsForm setPaymentOption={setPaymentOption} />
 
-				<section className="payment-status-sec"></section>
+				<section className="payment-status-sec">
+					{paymentOption === "paypal" && formattedCart && (
+						<PaypalButton cart={formattedCart} />
+					)}
+				</section>
 			</section>
 
 			<SimilarItems item={items[0]} scrollNext={scrollNext} scrollPrev={scrollPrev} />
