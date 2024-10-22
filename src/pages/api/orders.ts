@@ -1,34 +1,38 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import pool from "../../lib/db";
-import { iOrder, iOrderItem } from "@/lib/Type";
+import pool from "@/lib/db";
+import { CheckoutPaymentIntent, OrdersController } from "@paypal/paypal-server-sdk";
+import client from "@/lib/paypalClient"; // Ensure this file is created as per previous instructions
 
+const ordersController = new OrdersController(client);
+
+// Existing code for creating tables
 const createOrdersTable = async () => {
 	const createTableQuery = `
-  CREATE TABLE IF NOT EXISTS orders (
-   id SERIAL PRIMARY KEY,
-   username VARCHAR(255) NOT NULL,
-   NoOfItems INT NOT NULL,
-   total DECIMAL(10, 2) NOT NULL,
-   date DATE NOT NULL,
-   status VARCHAR(50) NOT NULL
-  );
- `;
+        CREATE TABLE IF NOT EXISTS orders (
+            id SERIAL PRIMARY KEY,
+            username VARCHAR(255) NOT NULL,
+            NoOfItems INT NOT NULL,
+            total DECIMAL(10, 2) NOT NULL,
+            date DATE NOT NULL,
+            status VARCHAR(50) NOT NULL
+        );
+    `;
 	await pool.query(createTableQuery);
 };
 
 const createOrderItemsTable = async () => {
 	const createTableQuery = `
-  CREATE TABLE IF NOT EXISTS order_items (
-   id SERIAL PRIMARY KEY,
-   order_id INT NOT NULL,
-   item_id INT NOT NULL,
-   name VARCHAR(255) NOT NULL,
-   quantity INT NOT NULL,
-   price DECIMAL(10, 2) NOT NULL,
-   image VARCHAR(255),
-   FOREIGN KEY (order_id) REFERENCES orders(id)
-  );
- `;
+        CREATE TABLE IF NOT EXISTS order_items (
+            id SERIAL PRIMARY KEY,
+            order_id INT NOT NULL,
+            item_id INT NOT NULL,
+            name VARCHAR(255) NOT NULL,
+            quantity INT NOT NULL,
+            price DECIMAL(10, 2) NOT NULL,
+            image VARCHAR(255),
+            FOREIGN KEY (order_id) REFERENCES orders(id)
+        );
+    `;
 	await pool.query(createTableQuery);
 };
 
@@ -68,51 +72,82 @@ async function getOrders(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function addOrder(req: NextApiRequest, res: NextApiResponse) {
-	const newOrder: iOrder = req.body;
+	const { username, items, total } = req.body; // Extract relevant data from request body
+
+	console.log("Adding order:", req.body);
 
 	try {
 		await createOrdersTable();
 		await createOrderItemsTable();
 
-		const insertOrderQuery = `
-   INSERT INTO orders (username, NoOfItems, total, date, status)
-   VALUES ($1, $2, $3, $4, $5)
-   RETURNING *;
-  `;
-		const orderValues = [
-			newOrder.username,
-			newOrder.noofitems,
-			newOrder.total,
-			newOrder.date,
-			newOrder.status,
-		];
-		const orderResult = await pool.query(insertOrderQuery, orderValues);
-		const addedOrder = orderResult.rows[0];
+		// Create PayPal Order
+		const orderData = await ordersController.ordersCreate({
+			body: {
+				intent: CheckoutPaymentIntent.Capture,
+				purchaseUnits: [{ amount: { currencyCode: "USD", value: total.toString() } }],
+			},
+		});
 
-		const insertOrderItemsQuery = `
-   INSERT INTO order_items (order_id, item_id, name, quantity, price, image)
-   VALUES ($1, $2, $3, $4, $5, $6)
-   RETURNING *;
-  `;
-		const orderItemsValues = newOrder.items.map((item: iOrderItem) => [
-			addedOrder.id,
-			item.item_id,
-			item.name,
-			item.quantity,
-			item.price,
-			item.image,
-		]);
+		console.log("PayPal Order Data:", orderData);
 
-		for (const values of orderItemsValues) {
-			await pool.query(insertOrderItemsQuery, values);
+		// Proceed only if PayPal order was created successfully
+		if (orderData.result.id) {
+			const insertOrderQuery = `
+                INSERT INTO orders (username, NoOfItems, total, date, status)
+                VALUES ($1, $2, $3, $4, $5)
+                RETURNING *;
+            `;
+
+			const orderValues = [
+				username,
+				items.length,
+				total,
+				new Date(),
+				"Pending", // Initial status
+			];
+
+			const orderResult = await pool.query(insertOrderQuery, orderValues);
+			const addedOrder = orderResult.rows[0];
+
+			// Insert Order Items
+			const insertOrderItemsQuery = `
+                INSERT INTO order_items (order_id, item_id, name, quantity, price, image)
+                VALUES ($1, $2, $3, $4, $5, $6)
+                RETURNING *;
+            `;
+
+			for (const item of items) {
+				const values = [
+					addedOrder.id,
+					item.item_id,
+					item.name,
+					item.quantity,
+					item.price,
+					item.image,
+				];
+				await pool.query(insertOrderItemsQuery, values);
+			}
+
+			// Fetch and attach items to the added order
+			const itemsResult = await pool.query("SELECT * FROM order_items WHERE order_id = $1", [
+				addedOrder.id,
+			]);
+
+			addedOrder.items = itemsResult.rows;
+
+			// Respond with the created order data and PayPal approval URL
+			console.log(
+				"Added order:",
+				`https://www.paypal.com/checkoutnow?token=${orderData.result.id}`,
+			);
+			res.status(201).json({
+				...addedOrder,
+				orderData,
+				paypalApprovalUrl: `https://www.paypal.com/checkoutnow?token=${orderData.result.id}`,
+			});
+		} else {
+			throw new Error("Failed to create PayPal Order");
 		}
-
-		const itemsResult = await pool.query("SELECT * FROM order_items WHERE order_id = $1", [
-			addedOrder.id,
-		]);
-		addedOrder.items = itemsResult.rows;
-
-		res.status(201).json(addedOrder);
 	} catch (error) {
 		console.error("Error adding order:", error);
 		res.status(500).json({ error: "Internal Server Error" });
@@ -124,13 +159,14 @@ async function updateOrder(req: NextApiRequest, res: NextApiResponse) {
 
 	try {
 		const updateQuery = `
-   UPDATE orders
-   SET ${Object.keys(updateData)
-		.map((key, index) => `${key} = $${index + 2}`)
-		.join(", ")}
-   WHERE id = $1
-   RETURNING *;
-  `;
+           UPDATE orders
+           SET ${Object.keys(updateData)
+				.map((key, index) => `${key} = $${index + 2}`)
+				.join(", ")}
+           WHERE id = $1
+           RETURNING *;
+        `;
+
 		const values = [id, ...Object.values(updateData)];
 		const result = await pool.query(updateQuery, values);
 
@@ -142,6 +178,7 @@ async function updateOrder(req: NextApiRequest, res: NextApiResponse) {
 		const itemsResult = await pool.query("SELECT * FROM order_items WHERE order_id = $1", [
 			updatedOrder.id,
 		]);
+
 		updatedOrder.items = itemsResult.rows;
 
 		res.status(200).json(updatedOrder);

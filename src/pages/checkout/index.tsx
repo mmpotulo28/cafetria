@@ -7,19 +7,20 @@ import { items } from "@/lib/data";
 import Sponsors from "@/components/Sponsors";
 import PersonalInfoForm from "./components/PersonalInfoForm";
 import OrderSummary from "./components/OrderSummary";
-import PaymentOptionsForm from "./components/PaymentOptionsForm";
-import { iCartItem } from "@/lib/Type";
+// import PaymentOptionsForm from "./components/PaymentOptionsForm";
+import { iCartItem, iOrder } from "@/lib/Type";
+import PaypalButton from "@/components/PaypalButton";
 
 const CheckoutPage: React.FC = () => {
 	const { data: session } = useSession();
-	const [paymentStatus] = useState<"pending" | "successful" | "failed">("successful");
-	const [, setCart] = useState<iCartItem[]>([]);
+	const [cart, setCart] = useState<iCartItem[]>([]);
 	const [, setUserData] = useState({
 		name: "",
 		email: "",
 		full_address: "",
 		phone: "",
 	});
+	const [formattedCart, setFormattedCart] = useState<iOrder>();
 
 	useEffect(() => {
 		const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -56,24 +57,37 @@ const CheckoutPage: React.FC = () => {
 		fetchUserData();
 	}, [session]);
 
-	function handleProceed(): void {
-		throw new Error("Function not implemented.");
-	}
+	useEffect(() => {
+		if (session?.user?.name && cart.length > 0) {
+			const formatted: iOrder = {
+				id: new Date().getTime(), // or any unique identifier
+				username: session.user.name,
+				items: cart.map((item, index) => ({
+					id: index + 1, // or any unique identifier for the item
+					order_id: new Date().getTime(), // or any unique identifier for the order
+					item_id: item.id,
+					name: item.name,
+					quantity: item.quantity,
+					price: item.total,
+				})),
+				noofitems: cart.length,
+				total: cart.reduce((acc, item) => acc + Number(item.total), 0).toString(),
+				date: new Date().toISOString(),
+				status: "pending", // or any default status
+			};
+			setFormattedCart(formatted);
+		}
+	}, [session, cart]);
 
 	return (
 		<>
 			<section className="checkout-sec">
 				<PersonalInfoForm />
 				<OrderSummary />
-				<PaymentOptionsForm />
+				{/* <PaymentOptionsForm /> */}
+				{formattedCart && <PaypalButton cart={formattedCart} />}
 
-				<section className="payment-status-sec">
-					{paymentStatus === "successful" ? (
-						<button onClick={handleProceed}>Proceed</button>
-					) : (
-						<p>Payment {paymentStatus}</p>
-					)}
-				</section>
+				<section className="payment-status-sec"></section>
 			</section>
 
 			<SimilarItems item={items[0]} scrollNext={scrollNext} scrollPrev={scrollPrev} />
