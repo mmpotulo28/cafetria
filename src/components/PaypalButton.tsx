@@ -7,6 +7,7 @@ import {
 	usePayPalCardFields,
 } from "@paypal/react-paypal-js";
 import { iOrder } from "../lib/Type";
+import { useRouter } from "next/router";
 
 interface Name {
 	givenName: string;
@@ -114,6 +115,7 @@ interface SubmitPaymentProps {
 }
 
 const PaypalButton: React.FC<{ cart: iOrder }> = ({ cart }) => {
+	const router = useRouter();
 	const [isPaying, setIsPaying] = useState(false);
 	const [message, setMessage] = useState("");
 	const initialOptions = {
@@ -196,6 +198,12 @@ const PaypalButton: React.FC<{ cart: iOrder }> = ({ cart }) => {
 				setMessage("Transaction was not successful.");
 			} else {
 				setMessage(`Transaction ${transaction.status}: ${transaction.id}`);
+				// Clear the cart
+				clearCart();
+				// Redirect after 2 seconds
+				setTimeout(() => {
+					router.push("/endpoints/user/orders");
+				}, 2000);
 			}
 		} catch (error) {
 			console.error("Error capturing order:", error);
@@ -210,6 +218,11 @@ const PaypalButton: React.FC<{ cart: iOrder }> = ({ cart }) => {
 		} else {
 			setMessage(String(error));
 		}
+	}
+
+	function clearCart() {
+		localStorage.removeItem("cart");
+		console.log("Cart Cleared");
 	}
 
 	return (
