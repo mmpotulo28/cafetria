@@ -8,6 +8,7 @@ import {
 } from "@paypal/react-paypal-js";
 import { iOrder } from "../lib/Type";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 interface Address {
 	addressLine1?: string;
@@ -112,6 +113,7 @@ const PaypalButton: React.FC<{ cart: iOrder }> = ({ cart }) => {
 	const router = useRouter();
 	const [isPaying, setIsPaying] = useState(false);
 	const [message, setMessage] = useState("");
+	const { data: session } = useSession();
 	// const [billingAddress] = useState<Address>({
 	// 	addressLine1: "",
 	// 	adminArea1: "",
@@ -137,12 +139,32 @@ const PaypalButton: React.FC<{ cart: iOrder }> = ({ cart }) => {
 
 	const createOrder = async () => {
 		try {
+			// Fetch user data from the database using the email from the cart
+			const userResponse = await fetch(`/api/user/profile?email=${session?.user?.email}`, {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+
+			if (!userResponse.ok) {
+				throw new Error("Failed to fetch user data");
+			}
+
+			const userData = await userResponse.json();
+
+			// Combine user data with cart data
+			const orderCart = {
+				...cart,
+				user: userData,
+			};
+
 			const response = await fetch("/api/orders", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify(cart),
+				body: JSON.stringify(orderCart),
 			});
 
 			const orderData = await response.json();

@@ -95,3 +95,14 @@ export interface ViewItemBlockProps {
 	statusClass: string;
 	onSubmit: (e: React.FormEvent<HTMLFormElement>, item: iCartItem | undefined) => void;
 }
+
+export interface iUserProfile {
+	username: string;
+	first_name: string;
+	last_name: string;
+	city: string;
+	country: string;
+	avatar_url: string;
+	phone_number: string;
+	email: string;
+}

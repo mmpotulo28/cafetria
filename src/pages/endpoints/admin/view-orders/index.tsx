@@ -1,13 +1,12 @@
-import UserDashStats from "@/components/UserDashStats";
-import UserLayout from "../UserLayout";
-import styles from "../styles.module.css";
-import orderStyles from "./styles.module.css";
 import UserDashOrderCard from "@/components/UserDashOrderCard";
 import { useState, useEffect, useCallback } from "react";
 import OrderView from "@/components/OrderView";
 import { iOrder } from "@/lib/Type";
 import Cookies from "js-cookie";
 import { useSession } from "next-auth/react";
+import AdminLayout from "@/components/AdminLayout";
+import styles from "../admin.module.css";
+import orderStyles from "./orders.module.css";
 
 const OrdersPage: React.FC = () => {
 	const { data: session } = useSession();
@@ -21,7 +20,12 @@ const OrdersPage: React.FC = () => {
 		if (!session?.user?.name) return;
 
 		try {
-			const response = await fetch(`/api/orders?username=${session.user.name}`);
+			const token = "adminauthtest";
+			const response = await fetch(`/api/orders?username=${session.user.name}`, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
 			const data = await response.json();
 			const sortedOrders = data.sort(
 				(a: iOrder, b: iOrder) => new Date(b.date).getTime() - new Date(a.date).getTime(),
@@ -66,7 +70,7 @@ const OrdersPage: React.FC = () => {
 	const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
 	return (
-		<UserLayout>
+		<AdminLayout>
 			{showViewOrder && currentOrder && (
 				<OrderView
 					orderStyles={orderStyles}
@@ -106,9 +110,8 @@ const OrdersPage: React.FC = () => {
 						)}
 					</div>
 				</div>
-				<UserDashStats styles={styles} />
 			</div>
-		</UserLayout>
+		</AdminLayout>
 	);
 };
 

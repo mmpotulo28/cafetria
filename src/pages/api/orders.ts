@@ -53,8 +53,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 }
 
 async function getOrders(req: NextApiRequest, res: NextApiResponse) {
+	const { username } = req.query;
+	const token = req.headers.authorization;
+
 	try {
-		const result = await pool.query("SELECT * FROM orders");
+		let result;
+		if (token) {
+			// Return all users' orders if token is present
+			result = await pool.query("SELECT * FROM orders");
+		} else {
+			// Return specific user's orders if username is provided
+			if (!username) {
+				return res.status(400).json({ error: "Username query parameter is required" });
+			}
+			result = await pool.query("SELECT * FROM orders WHERE username = $1", [username]);
+		}
+
 		const orders = result.rows;
 
 		for (const order of orders) {
@@ -64,7 +78,7 @@ async function getOrders(req: NextApiRequest, res: NextApiResponse) {
 			order.items = itemsResult.rows;
 		}
 
-		res.status(200).json(orders);
+		res.status(200).json(orders || []);
 	} catch (error) {
 		console.error("Error fetching orders:", error);
 		res.status(500).json({ error: "Internal Server Error" });

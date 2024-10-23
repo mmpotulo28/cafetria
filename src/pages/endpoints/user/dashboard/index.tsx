@@ -3,10 +3,13 @@ import styles from "../styles.module.css";
 import UserLayout from "../UserLayout";
 import { items } from "@/lib/data";
 import UserDashStats from "@/components/UserDashStats";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { useSession } from "next-auth/react";
+import { iOrder } from "@/lib/Type";
 
 export default function UserDashboardPage() {
+	const { data: session } = useSession();
 	const userData = {
 		profile: {
 			name: "John Doe",
@@ -32,31 +35,54 @@ export default function UserDashboardPage() {
 
 	const [orders, setOrders] = useState(userData.orders);
 
+	const fetchOrders = useCallback(async () => {
+		if (!session?.user?.name) return;
+
+		try {
+			const response = await fetch(`/api/orders?username=${session.user.name}`);
+			const data = await response.json();
+			const sortedOrders = data.sort(
+				(a: iOrder, b: iOrder) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+			);
+			const limitedOrders: iOrder[] = sortedOrders.slice(0, 6);
+			console.log("limitedOrders", limitedOrders);
+			setOrders(limitedOrders);
+			Cookies.set("orders", JSON.stringify(limitedOrders), { expires: 1 / 480 }); // 3 minutes
+		} catch (error) {
+			console.error("Error fetching orders:", error);
+		}
+	}, [session?.user?.name]);
+
 	useEffect(() => {
+		if (!session?.user?.email) return;
+
 		const cachedOrders = Cookies.get("orders");
 		if (cachedOrders) {
-			setOrders(JSON.parse(cachedOrders));
-		} else {
-			const fetchOrders = async () => {
-				try {
-					const response = await fetch("/api/orders");
-					const data = await response.json();
-					setOrders(data);
-					Cookies.set("orders", JSON.stringify(data), { expires: 1 / 48 }); // 3 minutes
-				} catch (error) {
-					console.error("Error fetching orders:", error);
+			try {
+				const parsedOrders = JSON.parse(cachedOrders);
+				if (
+					Array.isArray(parsedOrders) &&
+					parsedOrders.every((order) => "id" in order && "date" in order)
+				) {
+					console.log("cachedOrders", parsedOrders);
+					setOrders(parsedOrders);
+				} else {
+					throw new Error("Invalid order format");
 				}
-			};
-
+			} catch (error) {
+				console.error("Error parsing cached orders:", error);
+				fetchOrders();
+			}
+		} else {
 			fetchOrders();
 		}
-	}, []);
+	}, [fetchOrders, session?.user?.email]);
 
 	return (
 		<UserLayout>
 			<div className={styles.dashboardCards}>
 				<DashboardCard styles={styles} heading="Recent Orders">
-					{orders.map((order) => (
+					{orders?.map((order) => (
 						<li key={order.id}>
 							Order #{order.id} - {order.status}
 						</li>
