@@ -25,14 +25,19 @@ const UpdateItemForm: React.FC<UpdateItemFormProps> = ({ item, onUpdate, onCance
 		<form onSubmit={handleSubmit} className={styles.form}>
 			<label>
 				Name:
-				<input type="text" name="name" value={updatedItem.name} onChange={handleChange} />
+				<input
+					type="text"
+					name="name"
+					value={updatedItem?.name || ""}
+					onChange={handleChange}
+				/>
 			</label>
 			<label>
 				Price:
 				<input
 					type="number"
 					name="price"
-					value={updatedItem.price}
+					value={updatedItem?.price || 0}
 					onChange={handleChange}
 				/>
 			</label>
@@ -50,7 +55,7 @@ const UpdateItemForm: React.FC<UpdateItemFormProps> = ({ item, onUpdate, onCance
 				<input
 					type="text"
 					name="category"
-					value={updatedItem.category}
+					value={updatedItem?.category}
 					onChange={handleChange}
 				/>
 			</label>
@@ -58,7 +63,7 @@ const UpdateItemForm: React.FC<UpdateItemFormProps> = ({ item, onUpdate, onCance
 				Description:
 				<textarea
 					name="description"
-					value={updatedItem.description}
+					value={updatedItem?.description}
 					onChange={handleChange}
 				/>
 			</label>
