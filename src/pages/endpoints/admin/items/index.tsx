@@ -107,71 +107,59 @@ const AdminItemsPage: React.FC = () => {
 			return acc;
 		}, {} as { [key: string]: number });
 
-		if (categoryChartRef.current) {
-			if (categoryChartInstanceRef.current) {
-				categoryChartInstanceRef.current.destroy();
-			}
-
-			categoryChartInstanceRef.current = new Chart(categoryChartRef.current, {
-				type: "bar",
-				data: {
-					labels: Object.keys(categoryData),
-					datasets: [
-						{
-							label: "Items by Category",
-							data: Object.values(categoryData),
-							backgroundColor: "#36a2eb",
-							borderColor: "rgb(44, 44, 44)",
-							borderWidth: 1,
-						},
-					],
-				},
-				options: {
-					scales: {
-						y: {
-							beginAtZero: true,
+		const createChart = (
+			ref: React.RefObject<HTMLCanvasElement>,
+			data: { [key: string]: number },
+			label: string,
+			backgroundColor: string,
+		) => {
+			if (ref.current) {
+				const chartInstance = new Chart(ref.current, {
+					type: "bar",
+					data: {
+						labels: Object.keys(data),
+						datasets: [
+							{
+								label,
+								data: Object.values(data),
+								backgroundColor,
+								borderColor: "rgb(44, 44, 44)",
+								borderWidth: 1,
+							},
+						],
+					},
+					options: {
+						scales: {
+							y: {
+								beginAtZero: true,
+							},
 						},
 					},
-				},
-			});
-		}
-
-		if (statusChartRef.current) {
-			if (statusChartInstanceRef.current) {
-				statusChartInstanceRef.current.destroy();
+				});
+				return chartInstance;
 			}
+			return null;
+		};
 
-			statusChartInstanceRef.current = new Chart(statusChartRef.current, {
-				type: "bar",
-				data: {
-					labels: Object.keys(statusData),
-					datasets: [
-						{
-							label: "Items by Status",
-							data: Object.values(statusData),
-							backgroundColor: "#ff8f01",
-							borderColor: "rgb(44, 44, 44)",
-							borderWidth: 1,
-						},
-					],
-				},
-				options: {
-					scales: {
-						y: {
-							beginAtZero: true,
-						},
-					},
-				},
-			});
-		}
+		if (categoryChartInstanceRef.current) categoryChartInstanceRef.current.destroy();
+		categoryChartInstanceRef.current = createChart(
+			categoryChartRef,
+			categoryData,
+			"Items by Category",
+			"#36a2eb",
+		);
+
+		if (statusChartInstanceRef.current) statusChartInstanceRef.current.destroy();
+		statusChartInstanceRef.current = createChart(
+			statusChartRef,
+			statusData,
+			"Items by Status",
+			"#ff8f01",
+		);
 
 		return () => {
-			if (categoryChartInstanceRef.current) {
-				categoryChartInstanceRef.current.destroy();
-			}
-			if (statusChartInstanceRef.current) {
-				statusChartInstanceRef.current.destroy();
-			}
+			if (categoryChartInstanceRef.current) categoryChartInstanceRef.current.destroy();
+			if (statusChartInstanceRef.current) statusChartInstanceRef.current.destroy();
 		};
 	}, [items]);
 

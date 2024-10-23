@@ -1,6 +1,7 @@
 .addItems {
 	padding: 0;
 	scroll-margin: 20px;
+	width: 100%;
 }
 
 .addItemsContainer {
@@ -13,6 +14,7 @@
 	max-width: 1000px;
 	margin: 0 auto;
 	overflow-clip-margin: 20px;
+	width: 100%;
 }
 
 .itemList {
@@ -139,4 +141,66 @@
 	overflow-y: auto;
 	max-height: 200px;
 	font-size: 12px;
+}
+
+.itemForm {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 15px;
+	background-color: var(--font-color);
+	padding: 20px;
+	box-shadow: inset 0 0 5px 0 grey;
+	border-radius: 10px;
+	width: calc(100% - 40px);
+}
+
+.itemForm label {
+	display: flex;
+	flex-direction: column;
+	font-size: 16px;
+	color: var(--forth-color);
+}
+
+.itemForm select {
+	padding: 10px;
+	border: 1px solid var(--tet-color);
+	border-radius: 5px;
+	font-size: 16px;
+	background-color: white;
+	color: var(--forth-color);
+	appearance: none;
+	cursor: pointer;
+}
+
+.itemForm select:focus {
+	outline: none;
+	border-color: var(--prim-color);
+}
+
+.itemForm input[type="text"],
+.itemForm input[type="number"] {
+	padding: 10px;
+	border: 1px solid var(--tet-color);
+	border-radius: 5px;
+	font-size: 16px;
+}
+
+.itemForm input[type="checkbox"] {
+	width: 20px;
+	height: 20px;
+}
+
+.itemForm button {
+	max-height: 40px;
+	background-color: var(--forth-color);
+	border: none;
+	border-radius: 10px;
+	padding: 10px 20px;
+	font-size: 19px;
+	color: var(--font-color);
+	cursor: pointer;
+}
+
+.itemForm button:hover {
+	background-color: grey;
 }
