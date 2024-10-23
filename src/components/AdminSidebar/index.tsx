@@ -18,7 +18,7 @@ const AdminSidebar: React.FC = () => {
 		<div className={styles.sidebar}>
 			<ul className={styles.sidebarList}>
 				<li className={styles.sidebarItem}>
-					<Link href="/endpoints/admin/view-items">
+					<Link href="/endpoints/admin/items">
 						<FaBox /> View Items
 					</Link>
 				</li>
