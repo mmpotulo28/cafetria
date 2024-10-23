@@ -106,3 +106,24 @@ export interface iUserProfile {
 	phone_number: string;
 	email: string;
 }
+
+export interface iUserUpdateData {
+	username?: string;
+	first_name?: string;
+	last_name?: string;
+	phone_number?: string;
+	address?: string;
+	city?: string;
+	state?: string;
+	zip?: string;
+	country?: string;
+	facebook?: string;
+	twitter?: string;
+	instagram?: string;
+	linkedin?: string;
+	github?: string;
+	login_provider?: string;
+	avatar_url?: string;
+	email?: string;
+	user_type: string;
+}

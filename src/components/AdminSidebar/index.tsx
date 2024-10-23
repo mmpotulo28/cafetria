@@ -28,22 +28,22 @@ const AdminSidebar: React.FC = () => {
 					</Link>
 				</li>
 				<li className={styles.sidebarItem}>
-					<Link href="/endpoints/admin/view-orders">
+					<Link href="/endpoints/admin/orders">
 						<FaClipboardList /> View Orders
 					</Link>
 				</li>
 				<li className={styles.sidebarItem}>
-					<Link href="/endpoints/admin/view-staff">
+					<Link href="/endpoints/admin/staff">
 						<FaUsers /> View Staff
 					</Link>
 				</li>
 				<li className={styles.sidebarItem}>
-					<Link href="/endpoints/admin/view-stock">
+					<Link href="/endpoints/admin/stock">
 						<FaWarehouse /> View Stock
 					</Link>
 				</li>
 				<li className={styles.sidebarItem}>
-					<Link href="/endpoints/admin/view-users">
+					<Link href="/endpoints/admin/users">
 						<FaUser /> View Users
 					</Link>
 				</li>

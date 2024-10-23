@@ -6,7 +6,7 @@ import { iUserProfile } from "@/lib/Type";
 
 const fetchAllUserProfiles = async (): Promise<iUserProfile[]> => {
 	const query = `
-		SELECT username, first_name, last_name, city, country, avatar_url, phone_number, email FROM users
+		SELECT username, first_name, last_name, city, country, avatar_url, phone_number, email, user_type FROM users
 	`;
 	const result = await pool.query(query);
 	return result.rows;
