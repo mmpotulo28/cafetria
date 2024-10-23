@@ -5,15 +5,15 @@ import { iItem } from "@/lib/Type";
 const createItemsTable = async () => {
 	const createTableQuery = `
 	CREATE TABLE IF NOT EXISTS items (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE,
-    price DECIMAL(10, 2) NOT NULL,
-    status VARCHAR(50) NOT NULL,
-    img VARCHAR(255) NOT NULL,
-    recommended BOOLEAN NOT NULL,
-    category VARCHAR(100) NOT NULL,
-    description TEXT NOT NULL,
-    options JSON NOT NULL
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(255) NOT NULL UNIQUE,
+	price DECIMAL(10, 2) NOT NULL,
+	status VARCHAR(50) NOT NULL,
+	img VARCHAR(255) NOT NULL,
+	recommended BOOLEAN NOT NULL,
+	category VARCHAR(100) NOT NULL,
+	description TEXT NOT NULL,
+	options JSON NOT NULL
 );
 		`;
 
@@ -75,8 +75,41 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			console.error("Error fetching items:", error);
 			res.status(500).json({ error: "Internal Server Error" });
 		}
+	} else if (req.method === "PUT") {
+		const item: iItem = req.body;
+		const id = req.query.id;
+
+		try {
+			// Update the item in the database
+			const updateQuery = `
+				UPDATE items
+				SET price = $1, status = $2, img = $3, recommended = $4, category = $5, description = $6, options = $7
+				WHERE id = $8
+			`;
+			const values = [
+				item.price,
+				item.status,
+				item.img,
+				item.recommended,
+				item.category,
+				item.description,
+				item.options,
+				id,
+			];
+
+			const result = await pool.query(updateQuery, values);
+
+			if (result.rowCount === 0) {
+				return res.status(404).json({ message: "Item not found" });
+			}
+
+			res.status(200).json({ message: "Item updated successfully" });
+		} catch (error) {
+			console.error("Error updating item:", error);
+			res.status(500).json({ error: "Internal Server Error" });
+		}
 	} else {
-		res.setHeader("Allow", ["POST", "GET"]);
+		res.setHeader("Allow", ["POST", "GET", "PUT"]);
 		res.status(405).end(`Method ${req.method} Not Allowed`);
 	}
 }

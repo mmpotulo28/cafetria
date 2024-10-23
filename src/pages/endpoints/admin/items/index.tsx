@@ -6,12 +6,14 @@ import itemStyles from "./items.module.css";
 import { iItem } from "@/lib/Type";
 import Image from "next/image";
 import Chart from "chart.js/auto";
+import UpdateItemForm from "./UpdateItemForm";
 
 const AdminItemsPage: React.FC = () => {
 	const { data: session } = useSession();
 	const [items, setItems] = useState<iItem[]>([]);
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [statusMessage, setStatusMessage] = useState<string | null>(null);
+	const [editingItem, setEditingItem] = useState<iItem | null>(null);
 	const itemsPerPage = 9;
 
 	const categoryChartRef = useRef<HTMLCanvasElement>(null);
@@ -52,6 +54,41 @@ const AdminItemsPage: React.FC = () => {
 			setStatusMessage("Error deleting item.");
 		}
 	};
+
+	const updateItem = async (updatedItem: iItem) => {
+		try {
+			const response = await fetch(`/api/items?id=${updatedItem.id}`, {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(updatedItem),
+			});
+
+			if (response.ok) {
+				setItems((prevItems) =>
+					prevItems.map((item) => (item.id === updatedItem.id ? updatedItem : item)),
+				);
+				setEditingItem(null);
+				setStatusMessage("Item updated successfully.");
+			} else {
+				setStatusMessage("Failed to update item.");
+			}
+		} catch (error) {
+			console.error("Error updating item:", error);
+			setStatusMessage("Error updating item.");
+		}
+	};
+
+	useEffect(() => {
+		if (statusMessage) {
+			const timer = setTimeout(() => {
+				setStatusMessage(null);
+			}, 30000); // 30 seconds
+
+			return () => clearTimeout(timer);
+		}
+	}, [statusMessage]);
 
 	const indexOfLastItem = currentPage * itemsPerPage;
 	const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -144,67 +181,84 @@ const AdminItemsPage: React.FC = () => {
 				<div className={itemStyles.items}>
 					<h3>Items</h3>
 					{statusMessage && <p>{statusMessage}</p>}
-					<table className={itemStyles.itemsTable}>
-						<thead>
-							<tr>
-								<th>Image</th>
-								<th>Name</th>
-								<th>Price</th>
-								<th>Status</th>
-								<th>Category</th>
-								<th>Description</th>
-								<th>Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							{currentItems.map((item) => (
-								<tr key={item.id}>
-									<td>
-										<Image
-											src={`/images/${item.img}`}
-											alt="item image"
-											className={itemStyles.image}
-											width={40}
-											height={40}
-										/>
-									</td>
-									<td>{item.name}</td>
-									<td>{item.price}</td>
-									<td>{item.status}</td>
-									<td>{item.category}</td>
-									<td>{item.description}</td>
-									<td>
-										<button onClick={() => deleteItem(item.id)}>Delete</button>
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
-					<div className={itemStyles.pagination}>
-						{Array.from(
-							{ length: Math.ceil(items.length / itemsPerPage) },
-							(_, index) => (
-								<button
-									key={index + 1}
-									onClick={() => paginate(index + 1)}
-									className={
-										currentPage === index + 1 ? itemStyles.activePage : ""
-									}>
-									{index + 1}
-								</button>
-							),
-						)}
-					</div>
-					<div className={itemStyles.charts}>
-						<div className={itemStyles.chart}>
-							<h2>Items by Category</h2>
-							<canvas ref={categoryChartRef}></canvas>
-						</div>
-						<div className={itemStyles.chart}>
-							<h2>Items by Status</h2>
-							<canvas ref={statusChartRef}></canvas>
-						</div>
-					</div>
+					{editingItem ? (
+						<UpdateItemForm
+							item={editingItem}
+							onUpdate={updateItem}
+							onCancel={() => setEditingItem(null)}
+						/>
+					) : (
+						<>
+							<table className={itemStyles.itemsTable}>
+								<thead>
+									<tr>
+										<th>Image</th>
+										<th>Name</th>
+										<th>Price</th>
+										<th>Status</th>
+										<th>Category</th>
+										<th>Description</th>
+										<th>Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+									{currentItems.map((item) => (
+										<tr key={item.id}>
+											<td>
+												<Image
+													src={`/images/${item.img}`}
+													alt="item image"
+													className={itemStyles.image}
+													width={40}
+													height={40}
+												/>
+											</td>
+											<td>{item.name}</td>
+											<td>{item.price}</td>
+											<td>{item.status}</td>
+											<td>{item.category}</td>
+											<td>{item.description}</td>
+											<td>
+												<button onClick={() => deleteItem(item.id)}>
+													Delete
+												</button>
+												<button onClick={() => setEditingItem(item)}>
+													Edit
+												</button>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+							<div className={itemStyles.pagination}>
+								{Array.from(
+									{ length: Math.ceil(items.length / itemsPerPage) },
+									(_, index) => (
+										<button
+											key={index + 1}
+											onClick={() => paginate(index + 1)}
+											className={
+												currentPage === index + 1
+													? itemStyles.activePage
+													: ""
+											}>
+											{index + 1}
+										</button>
+									),
+								)}
+							</div>
+							<div className={itemStyles.charts}>
+								<div className={itemStyles.chart}>
+									<h2>Items by Category</h2>
+									<canvas ref={categoryChartRef}></canvas>
+								</div>
+								<div className={itemStyles.chart}>
+									<h2>Items by Status</h2>
+									<canvas ref={statusChartRef}></canvas>
+								</div>
+							</div>
+						</>
+					)}
 				</div>
 			</div>
 		</AdminLayout>
