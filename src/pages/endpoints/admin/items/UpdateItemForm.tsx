@@ -46,7 +46,7 @@ const UpdateItemForm: React.FC<UpdateItemFormProps> = ({ item, onUpdate, onCance
 				<input
 					type="text"
 					name="status"
-					value={updatedItem.status}
+					value={updatedItem?.status}
 					onChange={handleChange}
 				/>
 			</label>
