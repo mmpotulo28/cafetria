@@ -1,5 +1,5 @@
 import UserDashOrderCard from "@/components/UserDashOrderCard";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import OrderView from "@/components/OrderView";
 import { iOrder } from "@/lib/Type";
 import Cookies from "js-cookie";
@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import AdminLayout from "@/components/AdminLayout";
 import styles from "../admin.module.css";
 import orderStyles from "./orders.module.css";
+import Chart from "chart.js/auto";
 
 const OrdersPage: React.FC = () => {
 	const { data: session } = useSession();
@@ -14,12 +15,20 @@ const OrdersPage: React.FC = () => {
 	const [currentOrder, setCurrentOrder] = useState<iOrder | null>(null);
 	const [orders, setOrders] = useState<iOrder[]>([]);
 	const [currentPage, setCurrentPage] = useState<number>(1);
+	const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 	const ordersPerPage = 9;
+
+	const statusChartRef = useRef<HTMLCanvasElement>(null);
+	const dateChartRef = useRef<HTMLCanvasElement>(null);
+	const statusChartInstanceRef = useRef<Chart | null>(null);
+	const dateChartInstanceRef = useRef<Chart | null>(null);
 
 	const fetchOrders = useCallback(async () => {
 		if (!session?.user?.name) return;
 
 		try {
+			// clear orders
+			setOrders([]);
 			const token = "adminauthtest";
 			const response = await fetch(`/api/orders?username=${session.user.name}`, {
 				headers: {
@@ -32,7 +41,7 @@ const OrdersPage: React.FC = () => {
 			);
 			console.log("sortedOrders", sortedOrders);
 			setOrders(sortedOrders);
-			Cookies.set("orders", JSON.stringify(sortedOrders), { expires: 1 / 480 }); // 3 minutes
+			Cookies.set("orders", JSON.stringify(sortedOrders), { expires: 1 / 480 });
 		} catch (error) {
 			console.error("Error fetching orders:", error);
 		}
@@ -69,6 +78,93 @@ const OrdersPage: React.FC = () => {
 
 	const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
+	useEffect(() => {
+		const statusData = orders.reduce((acc, order) => {
+			acc[order.status] = (acc[order.status] || 0) + 1;
+			return acc;
+		}, {} as { [key: string]: number });
+
+		const dateData = orders.reduce((acc, order) => {
+			const date = new Date(order.date).toLocaleDateString();
+			acc[date] = (acc[date] || 0) + 1;
+			return acc;
+		}, {} as { [key: string]: number });
+
+		if (statusChartRef.current) {
+			if (statusChartInstanceRef.current) {
+				statusChartInstanceRef.current.destroy();
+			}
+
+			statusChartInstanceRef.current = new Chart(statusChartRef.current, {
+				type: "bar",
+				data: {
+					labels: Object.keys(statusData),
+					datasets: [
+						{
+							label: "Orders by Status",
+							data: Object.values(statusData),
+							backgroundColor: "#36a2eb",
+							borderColor: "rgb(44, 44, 44)",
+							borderWidth: 2,
+							borderRadius: 10,
+						},
+					],
+				},
+				options: {
+					scales: {
+						y: {
+							beginAtZero: true,
+						},
+					},
+				},
+			});
+		}
+
+		if (dateChartRef.current) {
+			if (dateChartInstanceRef.current) {
+				dateChartInstanceRef.current.destroy();
+			}
+
+			dateChartInstanceRef.current = new Chart(dateChartRef.current, {
+				type: "line",
+				data: {
+					labels: Object.keys(dateData),
+					datasets: [
+						{
+							label: "Orders by Date",
+							data: Object.values(dateData),
+							backgroundColor: "#ff8f01",
+							borderColor: "rgb(44, 44, 44)",
+							borderWidth: 2,
+						},
+					],
+				},
+				options: {
+					scales: {
+						y: {
+							beginAtZero: true,
+						},
+					},
+				},
+			});
+		}
+
+		return () => {
+			if (statusChartInstanceRef.current) {
+				statusChartInstanceRef.current.destroy();
+			}
+			if (dateChartInstanceRef.current) {
+				dateChartInstanceRef.current.destroy();
+			}
+		};
+	}, [orders]);
+
+	const handleRefresh = async () => {
+		setIsRefreshing(true);
+		await fetchOrders();
+		setIsRefreshing(false);
+	};
+
 	return (
 		<AdminLayout>
 			{showViewOrder && currentOrder && (
@@ -76,12 +172,19 @@ const OrdersPage: React.FC = () => {
 					orderStyles={orderStyles}
 					order={currentOrder}
 					setShowViewOrder={setShowViewOrder}
+					changeOrderStatus={true}
 				/>
 			)}
 
 			<div className={styles.dashboardCards}>
 				<div className={orderStyles.orders}>
 					<h3>Orders</h3>
+					<button
+						onClick={handleRefresh}
+						className={orderStyles.refreshButton}
+						disabled={isRefreshing}>
+						{isRefreshing ? "Refreshing..." : "Refresh Orders"}
+					</button>
 					<div className={orderStyles.ordersGrid}>
 						{currentOrders?.map((order) => (
 							<UserDashOrderCard
@@ -108,6 +211,17 @@ const OrdersPage: React.FC = () => {
 								</button>
 							),
 						)}
+					</div>
+				</div>
+
+				<div className={styles.charts}>
+					<div className={styles.chart}>
+						<h2>Orders by Status</h2>
+						<canvas ref={statusChartRef}></canvas>
+					</div>
+					<div className={styles.chart}>
+						<h2>Orders by Date</h2>
+						<canvas ref={dateChartRef}></canvas>
 					</div>
 				</div>
 			</div>

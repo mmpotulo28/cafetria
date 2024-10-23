@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import pool from "@/lib/db";
-import { iUserProfile } from "@/lib/Type";
+import { iUserProfile, iUserUpdateData } from "@/lib/Type";
 
 // Define the interface for the returned data
 
@@ -12,27 +12,7 @@ const fetchAllUserProfiles = async (): Promise<iUserProfile[]> => {
 	return result.rows;
 };
 
-const updateUserProfile = async (
-	email: string,
-	data: {
-		username?: string;
-		first_name?: string;
-		last_name?: string;
-		phone_number?: string;
-		address?: string;
-		city?: string;
-		state?: string;
-		zip?: string;
-		country?: string;
-		facebook?: string;
-		twitter?: string;
-		instagram?: string;
-		linkedin?: string;
-		github?: string;
-		login_provider?: string;
-		avatar_url?: string;
-	},
-) => {
+const updateUserProfile = async (email: string, data: iUserUpdateData) => {
 	const {
 		username,
 		first_name,
@@ -50,7 +30,8 @@ const updateUserProfile = async (
 		github,
 		login_provider,
 		avatar_url,
-	} = data;
+		user_type,
+	}: iUserUpdateData = data;
 
 	const query = `
 		UPDATE users
@@ -70,8 +51,9 @@ const updateUserProfile = async (
 			linkedin = COALESCE($13, linkedin),
 			github = COALESCE($14, github),
 			login_provider = COALESCE($15, login_provider),
-			avatar_url = COALESCE($16, avatar_url)
-		WHERE email = $17
+			avatar_url = COALESCE($16, avatar_url),
+			user_type = COALESCE($17, user_type)
+		WHERE email = $18
 		RETURNING *;
 	`;
 
@@ -92,6 +74,7 @@ const updateUserProfile = async (
 		github,
 		login_provider,
 		avatar_url,
+		user_type,
 		email,
 	]);
 
@@ -112,7 +95,7 @@ const deleteUserProfile = async (email: string) => {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	if (req.method === "GET") {
 		try {
-			const userProfiles = await fetchAllUserProfiles();
+			const userProfiles: iUserProfile[] = await fetchAllUserProfiles();
 			res.status(200).json(userProfiles);
 		} catch (error) {
 			console.error("Error fetching user profiles:", error);
@@ -137,7 +120,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			github,
 			login_provider,
 			avatar_url,
-		} = req.body;
+			user_type,
+		}: iUserUpdateData = req.body;
 
 		console.log("req.body:", req.body);
 
@@ -162,6 +146,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		if (!github) missingFields.push("github");
 		if (!login_provider) missingFields.push("login_provider");
 		if (!avatar_url) missingFields.push("avatar_url");
+		if (!user_type) missingFields.push("user_type");
 
 		if (missingFields.length > 0) {
 			return res
@@ -170,7 +155,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		}
 
 		try {
-			const updatedUserProfile = await updateUserProfile(email, {
+			const updatedUserProfile: iUserUpdateData = await updateUserProfile(email, {
 				username,
 				first_name,
 				last_name,
@@ -187,6 +172,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				github,
 				login_provider,
 				avatar_url,
+				user_type,
 			});
 
 			if (!updatedUserProfile) {

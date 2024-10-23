@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import AdminLayout from "@/components/AdminLayout";
 import styles from "../admin.module.css";
 import userStyles from "./users.module.css";
-import { iUserProfile } from "@/lib/Type";
+import { iUserProfile, iUserUpdateData } from "@/lib/Type";
 import Image from "next/image";
 import Chart from "chart.js/auto";
 
@@ -12,12 +12,13 @@ const UsersPage: React.FC = () => {
 	const [users, setUsers] = useState<iUserProfile[]>([]);
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [statusMessage, setStatusMessage] = useState<string | null>(null);
+	const [loading, setLoading] = useState<boolean>(false);
 	const usersPerPage = 9;
 
 	const cityChartRef = useRef<HTMLCanvasElement>(null);
-	const countryChartRef = useRef<HTMLCanvasElement>(null);
+	const userTypeChartRef = useRef<HTMLCanvasElement>(null);
 	const cityChartInstanceRef = useRef<Chart | null>(null);
-	const countryChartInstanceRef = useRef<Chart | null>(null);
+	const userTypeChartInstanceRef = useRef<Chart | null>(null);
 
 	const fetchUsers = useCallback(async () => {
 		if (!session?.user?.name) return;
@@ -36,7 +37,14 @@ const UsersPage: React.FC = () => {
 		fetchUsers();
 	}, [fetchUsers, session?.user?.email]);
 
+	const clearStatusMessage = () => {
+		setTimeout(() => {
+			setStatusMessage(null);
+		}, 5000);
+	};
+
 	const deleteUser = async (email: string) => {
+		setLoading(true);
 		try {
 			const response = await fetch(`/api/user/users?email=${email}`, {
 				method: "DELETE",
@@ -47,9 +55,55 @@ const UsersPage: React.FC = () => {
 			} else {
 				setStatusMessage("Failed to delete user.");
 			}
+			clearStatusMessage();
 		} catch (error) {
 			console.error("Error deleting user:", error);
 			setStatusMessage("Error deleting user.");
+			clearStatusMessage();
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const updateUserType = async (email: string, userType: string) => {
+		setLoading(true);
+		try {
+			const userResponse = await fetch(`/api/user/profile?email=${email}`);
+			if (!userResponse.ok) {
+				setStatusMessage("Failed to fetch user profile.");
+				clearStatusMessage();
+				return;
+			}
+			const user: iUserUpdateData = await userResponse.json();
+
+			const response = await fetch(`/api/user/users?email=${email}`, {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					...user,
+					user_type: userType,
+				}),
+			});
+			if (response.ok) {
+				setStatusMessage("User type updated successfully.");
+				setUsers(
+					users.map((user) =>
+						user.email === email ? { ...user, user_type: userType } : user,
+					),
+				);
+			} else {
+				const errorData = await response.json();
+				setStatusMessage(`Failed to update user type: ${JSON.stringify(errorData)}`);
+			}
+			clearStatusMessage();
+		} catch (error) {
+			console.error("Error updating user type:", error);
+			setStatusMessage("Error updating user type.");
+			clearStatusMessage();
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -65,8 +119,8 @@ const UsersPage: React.FC = () => {
 			return acc;
 		}, {} as { [key: string]: number });
 
-		const countryData = users.reduce((acc, user) => {
-			acc[user.country] = (acc[user.country] || 0) + 1;
+		const userTypeData = users.reduce((acc, user) => {
+			acc[user.user_type || 0] = (acc[user.user_type || 0] || 0) + 1;
 			return acc;
 		}, {} as { [key: string]: number });
 
@@ -85,7 +139,8 @@ const UsersPage: React.FC = () => {
 							data: Object.values(cityData),
 							backgroundColor: "#36a2eb",
 							borderColor: "rgb(44, 44, 44)",
-							borderWidth: 1,
+							borderWidth: 2,
+							borderRadius: 10,
 						},
 					],
 				},
@@ -99,22 +154,23 @@ const UsersPage: React.FC = () => {
 			});
 		}
 
-		if (countryChartRef.current) {
-			if (countryChartInstanceRef.current) {
-				countryChartInstanceRef.current.destroy();
+		if (userTypeChartRef.current) {
+			if (userTypeChartInstanceRef.current) {
+				userTypeChartInstanceRef.current.destroy();
 			}
 
-			countryChartInstanceRef.current = new Chart(countryChartRef.current, {
+			userTypeChartInstanceRef.current = new Chart(userTypeChartRef.current, {
 				type: "bar",
 				data: {
-					labels: Object.keys(countryData),
+					labels: Object.keys(userTypeData),
 					datasets: [
 						{
-							label: "Users by Country",
-							data: Object.values(countryData),
+							label: "Users by Type",
+							data: Object.values(userTypeData),
 							backgroundColor: "#ff8f01",
 							borderColor: "rgb(44, 44, 44)",
-							borderWidth: 1,
+							borderWidth: 2,
+							borderRadius: 10,
 						},
 					],
 				},
@@ -132,8 +188,8 @@ const UsersPage: React.FC = () => {
 			if (cityChartInstanceRef.current) {
 				cityChartInstanceRef.current.destroy();
 			}
-			if (countryChartInstanceRef.current) {
-				countryChartInstanceRef.current.destroy();
+			if (userTypeChartInstanceRef.current) {
+				userTypeChartInstanceRef.current.destroy();
 			}
 		};
 	}, [users]);
@@ -155,6 +211,7 @@ const UsersPage: React.FC = () => {
 								<th>Country</th>
 								<th>Phone Number</th>
 								<th>Email</th>
+								<th>User Type</th>
 								<th>Actions</th>
 							</tr>
 						</thead>
@@ -178,7 +235,22 @@ const UsersPage: React.FC = () => {
 									<td>{user.phone_number}</td>
 									<td>{user.email}</td>
 									<td>
-										<button onClick={() => deleteUser(user.email)}>
+										<select
+											value={user.user_type}
+											onChange={(e) =>
+												updateUserType(user.email, e.target.value)
+											}
+											disabled={loading}>
+											<option value="customer">Customer</option>
+											<option value="chef">Chef</option>
+											<option value="admin">Admin</option>
+											<option value="cashier">Cashier</option>
+										</select>
+									</td>
+									<td>
+										<button
+											onClick={() => deleteUser(user.email)}
+											disabled={loading}>
 											Delete
 										</button>
 									</td>
@@ -195,7 +267,8 @@ const UsersPage: React.FC = () => {
 									onClick={() => paginate(index + 1)}
 									className={
 										currentPage === index + 1 ? userStyles.activePage : ""
-									}>
+									}
+									disabled={loading}>
 									{index + 1}
 								</button>
 							),
@@ -207,8 +280,8 @@ const UsersPage: React.FC = () => {
 							<canvas ref={cityChartRef}></canvas>
 						</div>
 						<div className={userStyles.chart}>
-							<h2>Users by Country</h2>
-							<canvas ref={countryChartRef}></canvas>
+							<h2>Users by Type</h2>
+							<canvas ref={userTypeChartRef}></canvas>
 						</div>
 					</div>
 				</div>

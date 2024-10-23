@@ -66,24 +66,18 @@ const ReportsPage: React.FC = () => {
 
 			setUserData(users);
 
-			const ordersPerDate = orders.reduce(
-				(acc: { [key: string]: number }, order: iOrder) => {
-					const date = new Date(order.date).toLocaleDateString();
-					acc[date] = (acc[date] || 0) + 1;
-					return acc;
-				},
-				{},
-			);
+			const ordersPerDate = orders.reduce((acc: { [key: string]: number }, order: iOrder) => {
+				const date = new Date(order.date).toLocaleDateString();
+				acc[date] = (acc[date] || 0) + 1;
+				return acc;
+			}, {});
 
-			const itemsCount = orders.reduce(
-				(acc: { [key: string]: number }, order: iOrder) => {
-					order.items.forEach((item: iOrderItem) => {
-						acc[item.name] = (acc[item.name] || 0) + item.quantity;
-					});
-					return acc;
-				},
-				{},
-			);
+			const itemsCount = orders.reduce((acc: { [key: string]: number }, order: iOrder) => {
+				order.items.forEach((item: iOrderItem) => {
+					acc[item.name] = (acc[item.name] || 0) + item.quantity;
+				});
+				return acc;
+			}, {});
 
 			const stockStatus = items.reduce(
 				(acc: { inStock: number; outOfStock: number }, item: iItem) => {
@@ -153,7 +147,7 @@ const ReportsPage: React.FC = () => {
 							data: Object.values(limitedOrdersData),
 							backgroundColor: "#ff8f01",
 							borderColor: "rgb(44, 44, 44)",
-							borderWidth: 1,
+							borderWidth: 2,
 						},
 					],
 				},
@@ -182,7 +176,8 @@ const ReportsPage: React.FC = () => {
 							data: Object.values(limitedItemsData),
 							backgroundColor: "#ff8f01",
 							borderColor: "rgb(44, 44, 44)",
-							borderWidth: 1,
+							borderWidth: 2,
+							borderRadius: 10,
 						},
 					],
 				},
@@ -214,7 +209,7 @@ const ReportsPage: React.FC = () => {
 									"Friday",
 									"Saturday",
 									"Sunday",
-									]
+							  ]
 							: [
 									"Jan",
 									"Feb",
@@ -228,14 +223,14 @@ const ReportsPage: React.FC = () => {
 									"Oct",
 									"Nov",
 									"Dec",
-									],
+							  ],
 					datasets: [
 						{
 							label: "User Registrations",
 							data: Object.values(limitedOrdersData),
 							backgroundColor: "#4caf50",
 							borderColor: "#388e3c",
-							borderWidth: 1,
+							borderWidth: 2,
 							fill: false,
 						},
 					],
@@ -269,7 +264,8 @@ const ReportsPage: React.FC = () => {
 							data: userTypeData,
 							backgroundColor: ["#ff6384", "#36a2eb", "#ffce56", "#4bc0c0"],
 							borderColor: ["#ff6384", "#36a2eb", "#ffce56", "#4bc0c0"],
-							borderWidth: 1,
+							borderWidth: 2,
+							borderRadius: 10,
 						},
 					],
 				},
@@ -302,7 +298,8 @@ const ReportsPage: React.FC = () => {
 							data: [stockData.inStock, stockData.outOfStock],
 							backgroundColor: ["#4caf50", "#f44336"],
 							borderColor: ["#4caf50", "#f44336"],
-							borderWidth: 1,
+							borderWidth: 2,
+							borderRadius: 10,
 						},
 					],
 				},
@@ -331,7 +328,8 @@ const ReportsPage: React.FC = () => {
 							data: Object.values(limitedCustomerOrdersData),
 							backgroundColor: "#ff8f01",
 							borderColor: "rgb(44, 44, 44)",
-							borderWidth: 1,
+							borderWidth: 2,
+							borderRadius: 10,
 						},
 					],
 				},

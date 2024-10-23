@@ -105,6 +105,7 @@ export interface iUserProfile {
 	avatar_url: string;
 	phone_number: string;
 	email: string;
+	user_type?: string;
 }
 
 export interface iUserUpdateData {
