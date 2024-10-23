@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./admin-sidebar.module.css";
 import {
 	FaBox,
@@ -6,62 +6,47 @@ import {
 	FaClipboardList,
 	FaUsers,
 	FaWarehouse,
-	FaUser,
-	FaTags,
 	FaChartBar,
 	FaCog,
 } from "react-icons/fa";
 import Link from "next/link";
+import { useRouter } from "next/router";
+
+const navItems = [
+	{ path: "/endpoints/admin", label: "Dashboard", icon: <FaChartBar /> },
+	{ path: "/endpoints/admin/items", label: "View Items", icon: <FaBox /> },
+	{ path: "/endpoints/admin/add-items", label: "Add Items", icon: <FaPlus /> },
+	{ path: "/endpoints/admin/orders", label: "View Orders", icon: <FaClipboardList /> },
+	{ path: "/endpoints/admin/stock", label: "View Stock", icon: <FaWarehouse /> },
+	{ path: "/endpoints/admin/users", label: "View Users", icon: <FaUsers /> },
+	{ path: "/endpoints/admin/settings", label: "Settings", icon: <FaCog /> },
+];
 
 const AdminSidebar: React.FC = () => {
+	const router = useRouter();
+	const [activeItem, setActiveItem] = useState("");
+
+	useEffect(() => {
+		const currentItem = navItems.find((item) => item.path === router.pathname);
+		if (currentItem) {
+			setActiveItem(currentItem.label);
+		}
+	}, [router.pathname]);
+
 	return (
 		<div className={styles.sidebar}>
 			<ul className={styles.sidebarList}>
-				<li className={styles.sidebarItem}>
-					<Link href="/endpoints/admin/items">
-						<FaBox /> View Items
-					</Link>
-				</li>
-				<li className={styles.sidebarItem}>
-					<Link href="/endpoints/admin/add-items">
-						<FaPlus /> Add Items
-					</Link>
-				</li>
-				<li className={styles.sidebarItem}>
-					<Link href="/endpoints/admin/orders">
-						<FaClipboardList /> View Orders
-					</Link>
-				</li>
-				<li className={styles.sidebarItem}>
-					<Link href="/endpoints/admin/staff">
-						<FaUsers /> View Staff
-					</Link>
-				</li>
-				<li className={styles.sidebarItem}>
-					<Link href="/endpoints/admin/stock">
-						<FaWarehouse /> View Stock
-					</Link>
-				</li>
-				<li className={styles.sidebarItem}>
-					<Link href="/endpoints/admin/users">
-						<FaUser /> View Users
-					</Link>
-				</li>
-				<li className={styles.sidebarItem}>
-					<Link href="/endpoints/admin/manage-categories">
-						<FaTags /> Manage Categories
-					</Link>
-				</li>
-				<li className={styles.sidebarItem}>
-					<Link href="/endpoints/admin/reports">
-						<FaChartBar /> Reports
-					</Link>
-				</li>
-				<li className={styles.sidebarItem}>
-					<Link href="/endpoints/admin/settings">
-						<FaCog /> Settings
-					</Link>
-				</li>
+				{navItems.map((item) => (
+					<li
+						key={item.path}
+						className={`${styles.sidebarItem} ${
+							item.label === activeItem ? styles.active : ""
+						}`}>
+						<Link href={item.path} onClick={() => setActiveItem(item.label)}>
+							{item.icon} {item.label}
+						</Link>
+					</li>
+				))}
 			</ul>
 		</div>
 	);

@@ -269,3 +269,9 @@
 	border-top: 2px solid #ddd;
 	padding-top: 30px;
 }
+
+.buttons {
+	display: flex;
+	gap: 5px;
+	flex-wrap: nowrap;
+}

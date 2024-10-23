@@ -12,6 +12,7 @@ export interface iItem {
 		name: string;
 		opt: string[];
 	};
+	stock?: number;
 }
 
 export interface iCartItem {

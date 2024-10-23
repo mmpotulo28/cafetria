@@ -7,6 +7,7 @@ import { iItem } from "@/lib/Type";
 import Image from "next/image";
 import Chart from "chart.js/auto";
 import UpdateItemForm from "./UpdateItemForm";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 const AdminItemsPage: React.FC = () => {
 	const { data: session } = useSession();
@@ -208,12 +209,14 @@ const AdminItemsPage: React.FC = () => {
 											<td>{item.category}</td>
 											<td>{item.description}</td>
 											<td>
-												<button onClick={() => deleteItem(item.id)}>
-													Delete
-												</button>
-												<button onClick={() => setEditingItem(item)}>
-													Edit
-												</button>
+												<div className={styles.buttons}>
+													<button onClick={() => deleteItem(item.id)}>
+														<FaTrash />
+													</button>
+													<button onClick={() => setEditingItem(item)}>
+														<FaEdit />
+													</button>
+												</div>
 											</td>
 										</tr>
 									))}

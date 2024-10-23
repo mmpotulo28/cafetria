@@ -108,8 +108,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			console.error("Error updating item:", error);
 			res.status(500).json({ error: "Internal Server Error" });
 		}
+	} else if (req.method === "DELETE") {
+		const id = req.query.id;
+
+		try {
+			// Delete the item from the database
+			const deleteQuery = "DELETE FROM items WHERE id = $1";
+			const result = await pool.query(deleteQuery, [id]);
+
+			if (result.rowCount === 0) {
+				return res.status(404).json({ message: "Item not found" });
+			}
+
+			res.status(200).json({ message: "Item deleted successfully" });
+		} catch (error) {
+			console.error("Error deleting item:", error);
+			res.status(500).json({ error: "Internal Server Error" });
+		}
 	} else {
-		res.setHeader("Allow", ["POST", "GET", "PUT"]);
+		res.setHeader("Allow", ["POST", "GET", "PUT", "DELETE"]);
 		res.status(405).end(`Method ${req.method} Not Allowed`);
 	}
 }

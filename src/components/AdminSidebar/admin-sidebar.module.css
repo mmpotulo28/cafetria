@@ -48,3 +48,7 @@
 	grid-template-columns: 1fr;
 	gap: 10px;
 }
+
+.active {
+	border: 2px solid var(--prim-color) !important;
+}

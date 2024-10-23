@@ -24,6 +24,29 @@
 	border-bottom: 1px solid #ddd;
 }
 
+.usersTable td select,
+.usersTable td button {
+	padding: 10px;
+	border: 1px solid var(--tet-color);
+	border-radius: 5px;
+	font-size: 16px;
+	background-color: white;
+	color: var(--forth-color);
+	appearance: none;
+	cursor: pointer;
+}
+
+.usersTable td select:focus {
+	outline: none;
+	border-color: var(--prim-color);
+}
+
+.usersTable td button:hover,
+.usersTable td select:focus {
+	background-color: var(--forth-color);
+	color: var(--prim-color);
+}
+
 .usersTable th {
 	background-color: #f1f1f1;
 	font-weight: bold;
