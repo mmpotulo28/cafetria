@@ -114,7 +114,7 @@ const Header: React.FC = () => {
 						</Link>
 					</li>
 					<li className="nav-item">
-						<Link href="/" className="nav-link">
+						<Link href="/menu" className="nav-link">
 							<i className="fas fa-utensils"></i>
 							<p className="nav-item-text">Menu</p>
 						</Link>
