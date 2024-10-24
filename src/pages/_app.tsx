@@ -1,3 +1,4 @@
+					import { NextPage } from "next";
 import "@/styles/globals.css";
 import "@/styles/pages.css";
 import "@/styles/fontawesome-6.5.2/css/all.min.css";
@@ -9,6 +10,7 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 import { SessionProvider } from "next-auth/react";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import { FullScreenProvider, useFullScreen } from "@/context/FullScreenContext";
 
 const metadata: Metadata = {
 	title: "Cafetria | Home",
@@ -46,12 +48,24 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
 					<meta name="publisher" content={metadata.publisher || ""} />
 				</Head>
 
-				{/* main body content */}
-				<Layout>
-					<Component {...pageProps} />
-				</Layout>
+				<FullScreenProvider>
+					<Content Component={Component} pageProps={pageProps} />
+				</FullScreenProvider>
 			</PayPalScriptProvider>
 		</SessionProvider>
+	);
+};
+
+
+const Content = ({ Component, pageProps }: { Component: NextPage; pageProps: AppProps["pageProps"] }) => {
+	const { isFullScreen } = useFullScreen();
+
+	return isFullScreen ? (
+		<Component {...pageProps} />
+	) : (
+		<Layout>
+			<Component {...pageProps} />
+		</Layout>
 	);
 };
 
