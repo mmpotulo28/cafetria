@@ -312,6 +312,7 @@ ul {
 	flex-wrap: nowrap;
 	align-items: center;
 	cursor: pointer;
+	transition: all 0.3s ease-in-out;
 }
 
 .main-nav .right-nav-items {
@@ -334,6 +335,29 @@ ul {
 
 .main-nav .right-nav-items:hover {
 	background-color: black;
+}
+
+@media (max-width: 800px) {
+	.main-nav .nav-items .nav-item .nav-link p {
+		display: none;
+
+		transition: all 0.3s ease-in-out;
+	}
+
+	.main-nav .nav-items .nav-item .nav-link:hover p {
+		display: block;
+		transition: all 0.3s ease-in-out;
+	}
+
+	.main-nav .nav-items {
+		gap: 0;
+
+		transition: all 0.3s ease-in-out;
+	}
+
+	.main-nav .search-bar {
+		display: none;
+	}
 }
 
 .super-text {
