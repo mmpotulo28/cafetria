@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Updates from "./Updates";
@@ -10,7 +10,6 @@ export let updateCart = () => {};
 
 const Header: React.FC = () => {
 	const { data: session } = useSession();
-	const [userType, setUserType] = useState<string | null>(null);
 	const isUserLoggedIn = !!session;
 
 	// track cart
@@ -30,26 +29,6 @@ const Header: React.FC = () => {
 		return () => {
 			window.removeEventListener("storage", updateCart);
 		};
-	}, []);
-
-	useEffect(() => {
-		const fetchUserType = async () => {
-			let userType = Cookies.get("user_type");
-
-			if (!userType) {
-				// Refetch the cookie if it doesn't exist or is expired
-				const response = await fetch("/api/refresh-user-type");
-				const data = await response.json();
-				userType = data.user_type;
-				if (userType) {
-					Cookies.set("user_type", userType);
-				}
-			}
-
-			setUserType(userType || null);
-		};
-
-		fetchUserType();
 	}, []);
 
 	useEffect(() => {
@@ -87,6 +66,9 @@ const Header: React.FC = () => {
 					</Link>
 					<Link href={"/"} className="nav-link">
 						<i className="fab fa-linkedin"></i>
+					</Link>
+					<Link href={"/endpoints/admin"} className="nav-link">
+						<i className="fa fa-lock"></i>
 					</Link>
 				</div>
 			</div>
@@ -126,13 +108,7 @@ const Header: React.FC = () => {
 						</Link>
 					</li>
 					<li className="nav-item">
-						<Link
-							href={
-								userType === "admin"
-									? "/endpoints/admin"
-									: "/endpoints/user/dashboard"
-							}
-							className="nav-link">
+						<Link href={"/endpoints/user/dashboard"} className="nav-link">
 							<i className="fa fa-user"></i>
 							<p className="nav-item-text">Account</p>
 						</Link>
