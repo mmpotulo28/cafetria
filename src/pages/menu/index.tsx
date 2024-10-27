@@ -19,17 +19,17 @@ const Menu = () => {
 		fetchMenuItems();
 	}, [fetchMenuItems]);
 
-	useEffect(() => {
-		const shuffleArray = (array: iItem[]) => {
-			return array.sort(() => Math.random() - 0.5);
-		};
+	const shuffleArray = useCallback((array: iItem[]) => {
+		return array.sort(() => Math.random() - 0.5);
+	}, []);
 
+	useEffect(() => {
 		const intervalId = setInterval(() => {
 			setMenuItems((prevItems) => shuffleArray([...prevItems]));
-		}, 5000); // Shuffle items every second
+		}, 5000); // Shuffle items every 5 seconds
 
 		return () => clearInterval(intervalId); // Cleanup on unmount
-	}, []);
+	}, [shuffleArray]);
 
 	return (
 		<>
@@ -53,7 +53,7 @@ const Menu = () => {
 									className={styles.image}
 								/>
 							</div>
-							<p className={styles.price}>${Number(item.price).toFixed(2)}</p>
+							<p className={styles.price}>R{Number(item.price).toFixed(2)}</p>
 						</div>
 					);
 				})}

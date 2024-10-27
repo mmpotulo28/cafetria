@@ -25,7 +25,72 @@ const dummyData: iItem[] = [
 			opt: [],
 		},
 	},
-	// ... (other dummy items)
+	{
+		id: 1,
+		name: "Loading...",
+		status: "out-of-stock",
+		category: "all",
+		recommended: true,
+		price: "",
+		img: "placeholder-image.webp",
+		description: "",
+		options: {
+			name: "",
+			opt: [],
+		},
+	},{
+		id: 1,
+		name: "Loading...",
+		status: "out-of-stock",
+		category: "all",
+		recommended: true,
+		price: "",
+		img: "placeholder-image.webp",
+		description: "",
+		options: {
+			name: "",
+			opt: [],
+		},
+	},{
+		id: 1,
+		name: "Loading...",
+		status: "out-of-stock",
+		category: "all",
+		recommended: true,
+		price: "",
+		img: "placeholder-image.webp",
+		description: "",
+		options: {
+			name: "",
+			opt: [],
+		},
+	},{
+		id: 1,
+		name: "Loading...",
+		status: "out-of-stock",
+		category: "all",
+		recommended: true,
+		price: "",
+		img: "placeholder-image.webp",
+		description: "",
+		options: {
+			name: "",
+			opt: [],
+		},
+	},{
+		id: 1,
+		name: "Loading...",
+		status: "out-of-stock",
+		category: "all",
+		recommended: true,
+		price: "",
+		img: "placeholder-image.webp",
+		description: "",
+		options: {
+			name: "",
+			opt: [],
+		},
+	},
 ];
 
 const ItemsBlock = ({ itemClassName, filterByChoice, filterByValue }: iItemsBlockProps) => {

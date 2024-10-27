@@ -5,7 +5,6 @@
 	padding: 0;
 	scroll-behavior: smooth;
 	font-family: "Merriweather", serif;
-	/* box-sizing: border-box; */
 }
 
 a {
@@ -337,10 +336,9 @@ ul {
 	background-color: black;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
 	.main-nav .nav-items .nav-item .nav-link p {
 		display: none;
-
 		transition: all 0.3s ease-in-out;
 	}
 
@@ -351,7 +349,6 @@ ul {
 
 	.main-nav .nav-items {
 		gap: 0;
-
 		transition: all 0.3s ease-in-out;
 	}
 

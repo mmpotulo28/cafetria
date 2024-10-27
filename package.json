@@ -30,6 +30,7 @@
     "cafetria": "file:",
     "chart.js": "^4.4.5",
     "dotenv": "^16.4.5",
+    "emailjs-com": "^3.2.0",
     "embla-carousel-react": "^8.2.1",
     "express": "^4.21.1",
     "framer-motion": "^11.11.9",

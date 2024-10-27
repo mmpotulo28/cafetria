@@ -1,10 +1,22 @@
 .container {
 	display: grid;
-	grid-template-columns: 1fr 2fr;
+	grid-template-columns: 1fr 1fr;
 	max-width: 90%;
-	margin: 150px auto 50px auto;
+	margin: 200px auto 50px auto;
+	min-height: 63vh;
+	background: linear-gradient(to right, white, lightgrey, white);
+	background-size: 100% 100%;
+	animation: backgroundAnimation 5s linear infinite;
+}
+
+.contactsSection img {
+	border-radius: 50%;
 }
 .contactsSection {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 	padding: 20px;
 	border-right: 1px solid #ccc;
 }
@@ -12,6 +24,7 @@
 .formSection {
 	flex: 2;
 	padding: 20px;
+	max-width: 600px;
 }
 
 .formSection button {
@@ -36,6 +49,13 @@
 	margin-bottom: 20px;
 }
 
+.formSection form {
+	display: flex;
+	flex-direction: column;
+	width: calc(100% - 40px);
+	padding: 20px;
+}
+
 .formSection form div {
 	margin-bottom: 15px;
 }
@@ -47,7 +67,7 @@
 
 .formSection form input,
 .formSection form textarea {
-	width: 100%;
+	width: calc(100% - 20px);
 	padding: 10px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
@@ -56,4 +76,49 @@
 .formSection form textarea {
 	resize: vertical;
 	min-height: 100px;
+}
+
+.formSection form button {
+	padding: 10px 20px;
+	background-color: var(--forth-color);
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	max-width: 200px;
+}
+
+.form {
+	border-radius: 10px;
+	margin-bottom: 20px;
+	background: linear-gradient(to right, lightgrey, white, lightgrey);
+	background-size: 200% 100%;
+	animation: backgroundAnimation 5s linear infinite;
+}
+
+@keyframes backgroundAnimation {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.details {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	margin-top: 50px;
+}
+
+.icons {
+	display: flex;
+	gap: 20px;
+	color: var(--prim-color);
 }

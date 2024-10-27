@@ -1,7 +1,8 @@
-					import { NextPage } from "next";
+import { NextPage } from "next";
 import "@/styles/globals.css";
 import "@/styles/pages.css";
 import "@/styles/fontawesome-6.5.2/css/all.min.css";
+import Script from "next/script";
 
 import React from "react";
 import type { Metadata } from "next";
@@ -50,14 +51,37 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
 
 				<FullScreenProvider>
 					<Content Component={Component} pageProps={pageProps} />
+					{/* Google Analytics */}
+
+					<Script
+						src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}
+						strategy="afterInteractive"
+					/>
+					<Script
+						id="google-analytics"
+						strategy="afterInteractive"
+						dangerouslySetInnerHTML={{
+							__html: `
+													window.dataLayer = window.dataLayer || [];
+													function gtag(){dataLayer.push(arguments);}
+													gtag('js', new Date());
+													gtag('config', ${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID});
+												`,
+						}}
+					/>
 				</FullScreenProvider>
 			</PayPalScriptProvider>
 		</SessionProvider>
 	);
 };
 
-
-const Content = ({ Component, pageProps }: { Component: NextPage; pageProps: AppProps["pageProps"] }) => {
+const Content = ({
+	Component,
+	pageProps,
+}: {
+	Component: NextPage;
+	pageProps: AppProps["pageProps"];
+}) => {
 	const { isFullScreen } = useFullScreen();
 
 	return isFullScreen ? (
