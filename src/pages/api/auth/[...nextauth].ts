@@ -3,18 +3,9 @@ import GoogleProvider from "next-auth/providers/google";
 import LinkedInProvider from "next-auth/providers/linkedin";
 import TwitterProvider from "next-auth/providers/twitter";
 import DiscordProvider from "next-auth/providers/discord";
-import NextAuth, { Account, Session, TokenSet, User } from "next-auth";
+import NextAuth, { Account, Session,  User } from "next-auth";
+import { JWT } from "next-auth/jwt";
 
-interface SessionWithExtra extends Session {
-	user: {
-		id: string;
-		name: string;
-		email: string;
-		image: string;
-		access_token: string;
-		id_token: string;
-	};
-}
 
 export const authOptions = {
 	secret: process.env.NEXTAUTH_SECRET,
@@ -52,17 +43,12 @@ export const authOptions = {
 		}),
 	],
 	callbacks: {
-		async session({ session, token }: { session: SessionWithExtra; token: TokenSet }) {
+		async session({ session, token }: { session: Session; token: JWT }) {
 			// Include user.id and user.image in the session object
 			if (token && session.user) {
 				session.user.name = token.name as string;
 				session.user.email = token.email as string;
 				session.user.image = token.picture as string;
-				session.user.access_token = token.access_token as string;
-				session.user.id_token = token.id_token as string;
-				session.expires = token.expires_at
-					? new Date(token.expires_at).getTime().toString()
-					: (Date.now() + 10 * 60 * 1000).toString();
 			}
 			return session;
 		},
@@ -71,7 +57,7 @@ export const authOptions = {
 			user,
 			account,
 		}: {
-			token: TokenSet;
+			token: JWT;
 			user: User;
 			account: Account | null;
 		}) {
@@ -139,5 +125,4 @@ export const authOptions = {
 	},
 };
 
-// @ts-expect-error: NextAuth type mismatch
 export default NextAuth(authOptions);
