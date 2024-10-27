@@ -65,6 +65,16 @@ export const authOptions = {
 				token.name = user.name;
 				token.email = user.email;
 				token.picture = user.image;
+				token.access_token = account?.access_token;
+				token.expires_at = account?.expires_at;
+				token.id_token = account?.id_token;
+				token.refresh_token = account?.refresh_token;
+				token.token_type = account?.token_type;
+				token.session_state = account?.session_state;
+				token.scope = account?.scope;
+				token.token_type = account?.token_type;
+				token.provider = account?.provider;
+				token.expires_in = account?.expires_in;
 
 				// Check if the user exists in the database
 				const userExists = await fetch(
@@ -75,8 +85,6 @@ export const authOptions = {
 					},
 				);
 				const userExistsData = await userExists.json();
-
-				console.log("userExistsData", userExistsData);
 
 				if (!userExistsData.exists) {
 					console.log("creating user", user);

@@ -8,9 +8,12 @@ import {
 	FaWarehouse,
 	FaChartBar,
 	FaCog,
+	FaCompress,
+	FaExpand,
 } from "react-icons/fa";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useFullScreen } from "@/context/FullScreenContext";
 
 const navItems = [
 	{ path: "/endpoints/admin", label: "Dashboard", icon: <FaChartBar /> },
@@ -25,6 +28,7 @@ const navItems = [
 const AdminSidebar: React.FC = () => {
 	const router = useRouter();
 	const [activeItem, setActiveItem] = useState("");
+	const { isFullScreen, toggleFullScreen } = useFullScreen();
 
 	useEffect(() => {
 		const currentItem = navItems.find((item) => item.path === router.pathname);
@@ -47,6 +51,10 @@ const AdminSidebar: React.FC = () => {
 						</Link>
 					</li>
 				))}
+
+				<button onClick={toggleFullScreen} className={styles.fullScreenButton}>
+					{isFullScreen ? <FaCompress size={24} /> : <FaExpand size={24} />}
+				</button>
 			</ul>
 		</div>
 	);

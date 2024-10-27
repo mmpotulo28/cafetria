@@ -25,72 +25,7 @@ const dummyData: iItem[] = [
 			opt: [],
 		},
 	},
-	{
-		id: 1,
-		name: "Loading...",
-		status: "out-of-stock",
-		category: "all",
-		recommended: true,
-		price: "",
-		img: "placeholder-image.webp",
-		description: "",
-		options: {
-			name: "",
-			opt: [],
-		},
-	},{
-		id: 1,
-		name: "Loading...",
-		status: "out-of-stock",
-		category: "all",
-		recommended: true,
-		price: "",
-		img: "placeholder-image.webp",
-		description: "",
-		options: {
-			name: "",
-			opt: [],
-		},
-	},{
-		id: 1,
-		name: "Loading...",
-		status: "out-of-stock",
-		category: "all",
-		recommended: true,
-		price: "",
-		img: "placeholder-image.webp",
-		description: "",
-		options: {
-			name: "",
-			opt: [],
-		},
-	},{
-		id: 1,
-		name: "Loading...",
-		status: "out-of-stock",
-		category: "all",
-		recommended: true,
-		price: "",
-		img: "placeholder-image.webp",
-		description: "",
-		options: {
-			name: "",
-			opt: [],
-		},
-	},{
-		id: 1,
-		name: "Loading...",
-		status: "out-of-stock",
-		category: "all",
-		recommended: true,
-		price: "",
-		img: "placeholder-image.webp",
-		description: "",
-		options: {
-			name: "",
-			opt: [],
-		},
-	},
+	// ... other dummy items
 ];
 
 const ItemsBlock = ({ itemClassName, filterByChoice, filterByValue }: iItemsBlockProps) => {
@@ -115,18 +50,32 @@ const ItemsBlock = ({ itemClassName, filterByChoice, filterByValue }: iItemsBloc
 				throw new Error(`Error: ${response.statusText}`);
 			}
 			const data = await response.json();
-			setItems(data); // Replace dummy data with fetched data
+			setItems(data);
+			// clear cookie, then set
+			Cookies.remove("items");
 			Cookies.set("items", JSON.stringify(data), { expires: 1 / 480 }); // 3 minutes
 		} catch (error) {
 			console.error("Error fetching items:", error);
 		}
 	};
 
+	// remove all dummy data on items
+	useEffect(() => {
+		const filteredItems = items.filter((item) => item.name !== "Loading...");
+		if (filteredItems.length > 0) {
+			setItems(filteredItems);
+		}
+	}, []);
+
 	useEffect(() => {
 		const cookieItems = Cookies.get("items");
 		if (cookieItems) {
 			const parsedItems = JSON.parse(cookieItems);
-			setItems(parsedItems);
+			if (parsedItems.length > 0 && parsedItems[0].name !== "Loading...") {
+				setItems(parsedItems);
+			} else {
+				fetchItems();
+			}
 		} else {
 			fetchItems();
 		}
@@ -170,6 +119,8 @@ const ItemsBlock = ({ itemClassName, filterByChoice, filterByValue }: iItemsBloc
 						disabled = true;
 						statusClass = "out-of-stock";
 					}
+
+					if (item.name == "Loading...") return null;
 
 					return (
 						<DomItem

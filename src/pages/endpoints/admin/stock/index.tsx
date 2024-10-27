@@ -25,7 +25,6 @@ const ReportsPage: React.FC = () => {
 			const response = await axios.get("/api/items");
 			const stock: iItem[] = await response.data;
 
-			console.log("stock", stock);
 
 			setStockData(stock);
 		} catch (error) {

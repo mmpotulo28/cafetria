@@ -86,8 +86,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	} else if (req.method === "GET") {
 		// Login
 		const { email, password } = req.query;
-		console.log("email:", email);
-		console.log("password:", password);
 
 		if (!email || !password) {
 			return res.status(400).json({ message: "Email and password are required" });

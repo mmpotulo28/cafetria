@@ -68,7 +68,7 @@ export default function UserProfilePage() {
 				Cookies.set("userProfile", JSON.stringify(data), { expires: 1 / 48 });
 			} else {
 				setStatusMessage(data.error);
-				console.log("Failed to fetch user data:", data);
+				console.error("Failed to fetch user data:", data);
 			}
 		};
 
@@ -126,7 +126,7 @@ export default function UserProfilePage() {
 			Cookies.set("userProfile", JSON.stringify(data), { expires: 1 / 48 });
 		} else {
 			setStatusMessage("Failed to update profile");
-			console.log("Failed to update profile:", await response.json());
+			console.error("Failed to update profile:", await response.json());
 		}
 	};
 

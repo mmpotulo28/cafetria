@@ -2,34 +2,16 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Updates from "./Updates";
-import { iCartItem } from "@/lib/Type";
 import { useSession, signOut } from "next-auth/react";
 import Cookies from "js-cookie";
-
-export let updateCart = () => {};
+import { useFullScreen } from "@/context/FullScreenContext";
 
 const Header: React.FC = () => {
 	const { data: session } = useSession();
 	const isUserLoggedIn = !!session;
 
 	// track cart
-	const [cart, setCart] = React.useState<iCartItem[]>([]);
-
-	useEffect(() => {
-		updateCart = () => {
-			const updatedCart = JSON.parse(window.localStorage.getItem("cart") || "[]");
-			setCart(updatedCart);
-		};
-
-		const initialCart = JSON.parse(window.localStorage.getItem("cart") || "[]");
-		setCart(initialCart);
-
-		window.addEventListener("storage", updateCart);
-
-		return () => {
-			window.removeEventListener("storage", updateCart);
-		};
-	}, []);
+	const { cart } = useFullScreen();
 
 	useEffect(() => {
 		const fetchUserData = async () => {
@@ -39,7 +21,7 @@ const Header: React.FC = () => {
 				// Cache the data with a 3-minute expiration
 				Cookies.set("userProfile", JSON.stringify(data), { expires: 1 / 48 });
 			} else {
-				console.log("Failed to fetch user data:", data);
+				console.error("Failed to fetch user data:", data);
 			}
 		};
 

@@ -19,6 +19,7 @@ const UsersPage: React.FC = () => {
 	const userTypeChartRef = useRef<HTMLCanvasElement>(null);
 	const cityChartInstanceRef = useRef<Chart | null>(null);
 	const userTypeChartInstanceRef = useRef<Chart | null>(null);
+	console.log("session", session);
 
 	const fetchUsers = useCallback(async () => {
 		if (!session?.user?.name) return;

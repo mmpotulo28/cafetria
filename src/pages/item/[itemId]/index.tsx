@@ -8,7 +8,7 @@ import { scrollNext, scrollPrev } from "@/components/ItemsBlock";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import SimilarItems from "../components/SimilarItems";
-import { updateCart } from "@/components/Header";
+import { useFullScreen } from "@/context/FullScreenContext";
 
 const dummyItem: iItem = {
 	id: 1001,
@@ -30,6 +30,7 @@ const ItemPage: React.FC = () => {
 	const [items, setItems] = useState<iItem[]>([]);
 	const [item, setItem] = useState<iItem>(dummyItem);
 	const { itemId } = router.query;
+	const { addToCart } = useFullScreen();
 
 	const fetchItems = useCallback(async () => {
 		try {
@@ -62,29 +63,12 @@ const ItemPage: React.FC = () => {
 		}
 	}, [itemId, items]);
 
-	const setCartOnStorage = useCallback(
-		(e: FormEvent<HTMLFormElement>, item: iCartItem | undefined): void => {
-			e.preventDefault();
-			const cart: iCartItem[] = localStorage.getItem("cart")
-				? JSON.parse(localStorage.getItem("cart") || "[]")
-				: [];
-
-			if (!item) return;
-
-			const existing = cart.find((cartItem) => cartItem.id === item.id);
-
-			if (existing) {
-				existing.quantity += item.quantity;
-				existing.total = (existing.quantity * parseInt(item.total)).toString();
-			} else {
-				cart.push(item);
-			}
-
-			window.localStorage.setItem("cart", JSON.stringify(cart));
-			updateCart();
-		},
-		[],
-	);
+	const handleAddToCart = (e: FormEvent<HTMLFormElement>, item: iCartItem | undefined): void => {
+		e.preventDefault();
+		if (item) {
+			addToCart(item);
+		}
+	};
 
 	if (!itemId) {
 		return <div>Loading...</div>;
@@ -97,7 +81,7 @@ const ItemPage: React.FC = () => {
 				{item && item.img && <link rel="icon" href={item.img} />}
 			</Head>
 			<section className="view-item-block">
-				<ViewItemBlock onSubmit={setCartOnStorage} btnClass="" item={item} statusClass="" />
+				<ViewItemBlock onSubmit={handleAddToCart} btnClass="" item={item} statusClass="" />
 			</section>
 
 			<SimilarItems item={item} scrollNext={scrollNext} scrollPrev={scrollPrev} />

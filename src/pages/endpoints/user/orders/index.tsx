@@ -26,7 +26,6 @@ const OrdersPage: React.FC = () => {
 			const sortedOrders = data.sort(
 				(a: iOrder, b: iOrder) => new Date(b.date).getTime() - new Date(a.date).getTime(),
 			);
-			console.log("sortedOrders", sortedOrders);
 			setOrders(sortedOrders);
 			Cookies.set("orders", JSON.stringify(sortedOrders), { expires: 1 / 480 }); // 3 minutes
 		} catch (error) {
@@ -45,7 +44,6 @@ const OrdersPage: React.FC = () => {
 					Array.isArray(parsedOrders) &&
 					parsedOrders.every((order) => "id" in order && "date" in order)
 				) {
-					console.log("cachedOrders", parsedOrders);
 					setOrders(parsedOrders);
 				} else {
 					throw new Error("Invalid order format");

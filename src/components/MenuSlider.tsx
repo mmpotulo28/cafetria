@@ -31,8 +31,6 @@ const MenuSlider = () => {
 					.filter((item) => item.category === category.data)
 					.slice(0, 5);
 
-				console.log(category.name, categoryItems);
-
 				return {
 					category,
 					items: categoryItems,

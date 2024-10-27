@@ -37,8 +37,6 @@ const createOrderItemsTable = async () => {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	console.log("API endpoint called");
-
 	switch (req.method) {
 		case "GET":
 			return getOrders(req, res);
@@ -88,8 +86,6 @@ async function getOrders(req: NextApiRequest, res: NextApiResponse) {
 async function addOrder(req: NextApiRequest, res: NextApiResponse) {
 	const { username, items, total } = req.body; // Extract relevant data from request body
 
-	console.log("Adding order:", req.body);
-
 	try {
 		await createOrdersTable();
 		await createOrderItemsTable();
@@ -101,8 +97,6 @@ async function addOrder(req: NextApiRequest, res: NextApiResponse) {
 				purchaseUnits: [{ amount: { currencyCode: "USD", value: total.toString() } }],
 			},
 		});
-
-		console.log("PayPal Order Data:", orderData);
 
 		// Proceed only if PayPal order was created successfully
 		if (orderData.result.id) {
@@ -149,11 +143,6 @@ async function addOrder(req: NextApiRequest, res: NextApiResponse) {
 
 			addedOrder.items = itemsResult.rows;
 
-			// Respond with the created order data and PayPal approval URL
-			console.log(
-				"Added order:",
-				`https://www.paypal.com/checkoutnow?token=${orderData.result.id}`,
-			);
 			res.status(201).json({
 				...addedOrder,
 				orderData,

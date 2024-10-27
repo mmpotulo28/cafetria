@@ -14,8 +14,7 @@ const addItemsToDatabase = async (items: iItem[]) => {
 			throw new Error("Failed to add items");
 		}
 
-		const data = await response.json();
-		console.log(data.message); // Log success message
+		// const data = await response.json();
 	} catch (error) {
 		console.error("Error adding items:", error);
 	}

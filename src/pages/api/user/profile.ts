@@ -136,8 +136,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			avatar_url,
 		} = req.body;
 
-		console.log("req.body:", req.body);
-
 		if (!email || typeof email !== "string") {
 			return res.status(400).json({ error: "Invalid or missing email parameter" });
 		}

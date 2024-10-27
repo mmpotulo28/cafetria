@@ -1,3 +1,4 @@
+import { useFullScreen } from "@/context/FullScreenContext";
 import { iSidebarLink } from "@/lib/Type";
 import Link from "next/link";
 import React from "react";
@@ -7,6 +8,8 @@ interface DashboardSidebarProps {
 }
 
 const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ styles }) => {
+	const { isFullScreen, toggleFullScreen } = useFullScreen();
+
 	const sidebarLinks: iSidebarLink[] = [
 		{ href: "/endpoints/user/dashboard", icon: "fas fa-tachometer-alt", text: "Dashboard" },
 		{ href: "/endpoints/user/orders", icon: "fas fa-clipboard-list", text: "Orders" },
@@ -27,6 +30,14 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ styles }) => {
 					</Link>
 				</li>
 			))}
+
+			<button onClick={toggleFullScreen} className={styles.fullScreenButton}>
+				{isFullScreen ? (
+					<i className="fas fa-compress"></i>
+				) : (
+					<i className="fas fa-expand"></i>
+				)}
+			</button>
 		</ul>
 	);
 };

@@ -32,13 +32,13 @@ const CartTableRow: React.FC<iCartTableRowProps> = ({ product, editOnclick, delO
 				<td>
 					<button
 						className="cart-edit-btn"
-						key={product.id}
+						key={`edit${product.id}`}
 						onClick={(e) => editOnclick(e, product.id)}>
 						<i className="fa fa-edit"></i>
 					</button>
 					<button
 						className="cart-del-btn"
-						key={product.id}
+						key={`delete${product.id}`}
 						onClick={(e) => delOnclick(e, product.id)}>
 						<i className="fa fa-trash"></i>
 					</button>

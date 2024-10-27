@@ -21,7 +21,6 @@ const createItemsTable = async () => {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	console.log("api endpoint called");
 	if (req.method === "POST") {
 		const items: iItem[] = req.body;
 

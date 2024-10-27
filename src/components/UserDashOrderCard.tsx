@@ -16,8 +16,6 @@ const UserDashOrderCard: React.FC<UserDashOrderCardProps> = ({
 	setShowViewOrder,
 	setCurrentOrder,
 }) => {
-	console.log("order", order);
-
 	return (
 		<>
 			<div className={orderStyles.order + " slide-in-left"}>

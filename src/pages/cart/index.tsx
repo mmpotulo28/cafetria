@@ -1,41 +1,24 @@
-import React, { useEffect } from "react";
+import React from "react";
 import CartTableRow from "./components/cartTableRow";
 import Link from "next/link";
 import { iProduct } from "@/lib/Type";
 import { useRouter } from "next/router";
-import { updateCart } from "@/components/Header";
+import { useFullScreen } from "@/context/FullScreenContext";
 
 const CartPage: React.FC = () => {
 	const router = useRouter();
-	const [cart, setCart] = React.useState<iProduct[]>([]);
-	useEffect(() => {
-		// dummy cart data
-		const cartItems: iProduct[] = [];
-
-		// get cart from localStorage
-		setCart(JSON.parse(localStorage.getItem("cart") || JSON.stringify(cartItems)));
-	}, []);
+	const { cart, removeFromCart } = useFullScreen();
 
 	// delete buttonOnClick
 	const delBtnClick = (e: React.MouseEvent<HTMLButtonElement>, id: number) => {
 		e.preventDefault();
-
-		// remove item with id from cart
-		const newCart = cart.filter((product) => product.id !== id);
-		setCart(newCart);
-		localStorage.setItem("cart", JSON.stringify(newCart));
-		updateCart();
+		removeFromCart(id);
 	};
 
 	// edit button onclick
 	const editBtnClick = (e: React.MouseEvent<HTMLButtonElement>, id: number) => {
 		e.preventDefault();
-		// remove item with id from cart
-		const newCart = cart.filter((product) => product.id !== id);
-		setCart(newCart);
-
-		// the route to item/id page
-		updateCart();
+		removeFromCart(id);
 		router.push(`/item/${id}`);
 	};
 

@@ -10,7 +10,6 @@ const WelcomeDashboard: React.FC<WelcomeDashboardProps> = ({ styles }) => {
 	const { data: session } = useSession();
 	const userName = session?.user?.name || "Guest";
 	const avatar = session?.user?.image || "/images/placeholder-image.webp";
-	console.log("session:", session);
 
 	return (
 		<div className={styles.welcomeMessage}>

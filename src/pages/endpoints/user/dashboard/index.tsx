@@ -45,7 +45,6 @@ export default function UserDashboardPage() {
 				(a: iOrder, b: iOrder) => new Date(b.date).getTime() - new Date(a.date).getTime(),
 			);
 			const limitedOrders: iOrder[] = sortedOrders.slice(0, 6);
-			console.log("limitedOrders", limitedOrders);
 			setOrders(limitedOrders);
 			Cookies.set("orders", JSON.stringify(limitedOrders), { expires: 1 / 480 }); // 3 minutes
 		} catch (error) {
@@ -64,7 +63,6 @@ export default function UserDashboardPage() {
 					Array.isArray(parsedOrders) &&
 					parsedOrders.every((order) => "id" in order && "date" in order)
 				) {
-					console.log("cachedOrders", parsedOrders);
 					setOrders(parsedOrders);
 				} else {
 					throw new Error("Invalid order format");
