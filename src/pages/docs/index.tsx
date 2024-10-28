@@ -11,14 +11,17 @@ const DocsPage: React.FC = () => {
 				<ul className={styles.list}>
 					<li className={styles.listItem}>
 						<Image
-							src="/images/manuals.png"
+							src="/images/git.webp"
 							alt="Manuals"
 							width={100}
 							height={100}
 							className={styles.icon}
 						/>
-						<Link href="/faqs" className={styles.link}>
-							FAQs
+						<Link
+							href="https://github.com/mmpotulo28/cafetria"
+							className={styles.link}
+							target="_blank">
+							Code Base (for Demo)
 						</Link>
 					</li>
 					<li className={styles.listItem}>

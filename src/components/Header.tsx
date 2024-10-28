@@ -49,6 +49,12 @@ const Header: React.FC = () => {
 					<Link href={"/"} className="nav-link">
 						<i className="fab fa-linkedin"></i>
 					</Link>
+					<Link
+						href={"https://github.com/mmpotulo28/cafetria"}
+						className="nav-link"
+						target="_blank">
+						<i className="fab fa-github"></i>
+					</Link>
 					<Link href={"/endpoints/admin"} className="nav-link">
 						<i className="fa fa-lock"></i>
 					</Link>
