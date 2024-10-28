@@ -25,7 +25,76 @@ const dummyData: iItem[] = [
 			opt: [],
 		},
 	},
-	// ... other dummy items
+	{
+		id: 2,
+		name: "Loading...",
+		status: "out-of-stock",
+		category: "all",
+		recommended: true,
+		price: "",
+		img: "placeholder-image.webp",
+		description: "",
+		options: {
+			name: "",
+			opt: [],
+		},
+	},
+	{
+		id: 3,
+		name: "Loading...",
+		status: "out-of-stock",
+		category: "all",
+		recommended: true,
+		price: "",
+		img: "placeholder-image.webp",
+		description: "",
+		options: {
+			name: "",
+			opt: [],
+		},
+	},
+	{
+		id: 4,
+		name: "Loading...",
+		status: "out-of-stock",
+		category: "all",
+		recommended: true,
+		price: "",
+		img: "placeholder-image.webp",
+		description: "",
+		options: {
+			name: "",
+			opt: [],
+		},
+	},
+	{
+		id: 5,
+		name: "Loading...",
+		status: "out-of-stock",
+		category: "all",
+		recommended: true,
+		price: "",
+		img: "placeholder-image.webp",
+		description: "",
+		options: {
+			name: "",
+			opt: [],
+		},
+	},
+	{
+		id: 6,
+		name: "Loading...",
+		status: "out-of-stock",
+		category: "all",
+		recommended: true,
+		price: "",
+		img: "placeholder-image.webp",
+		description: "",
+		options: {
+			name: "",
+			opt: [],
+		},
+	},
 ];
 
 const ItemsBlock = ({ itemClassName, filterByChoice, filterByValue }: iItemsBlockProps) => {
@@ -120,7 +189,7 @@ const ItemsBlock = ({ itemClassName, filterByChoice, filterByValue }: iItemsBloc
 						statusClass = "out-of-stock";
 					}
 
-					if (item.name == "Loading...") return null;
+					// if (item.name == "Loading...") return null;
 
 					return (
 						<DomItem
