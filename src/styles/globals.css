@@ -295,15 +295,18 @@ ul {
 	display: flex;
 	padding: 10px 10px;
 	max-block-size: 20px;
-	border-radius: 10px 10px 0 0;
 	background-color: transparent;
 	color: var(--sec-color);
 	align-items: center;
+	transition: all 0.3s ease-in-out;
+	border-radius: 20px;
 }
 
-.main-nav .nav-items .nav-item:hover {
+.main-nav .nav-items .nav-item:hover,
+.main-nav .nav-items .nav-item.active {
 	color: black;
 	font-weight: bold;
+	background-color: var(--font-color);
 }
 
 .main-nav .nav-items .nav-item .nav-link {
@@ -311,7 +314,6 @@ ul {
 	flex-wrap: nowrap;
 	align-items: center;
 	cursor: pointer;
-	transition: all 0.3s ease-in-out;
 }
 
 .main-nav .right-nav-items {

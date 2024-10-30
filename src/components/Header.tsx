@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Updates from "./Updates";
@@ -8,6 +8,7 @@ import { useFullScreen } from "@/context/FullScreenContext";
 
 const Header: React.FC = () => {
 	const { data: session } = useSession();
+	const [isActive, setIsActive] = useState<number>(0);
 	const isUserLoggedIn = !!session;
 
 	// track cart
@@ -75,52 +76,11 @@ const Header: React.FC = () => {
 					/>
 				</div>
 
-				<ul className="nav-items">
-					{/* home */}
-					<li className="nav-item">
-						<Link href="/" className="nav-link">
-							<i className="fa fa-home"></i>
-							<p className="nav-item-text">Home</p>
-						</Link>
-					</li>
-					<li className="nav-item">
-						<Link href="/menu" className="nav-link">
-							<i className="fas fa-utensils"></i>
-							<p className="nav-item-text">Menu</p>
-						</Link>
-					</li>
-					<li className="nav-item">
-						<Link href="#" className="nav-link">
-							<i className="fa fa-percent"></i>
-							<p className="nav-item-text">Sales</p>
-						</Link>
-					</li>
-					<li className="nav-item">
-						<Link href={"/endpoints/user/dashboard"} className="nav-link">
-							<i className="fa fa-user"></i>
-							<p className="nav-item-text">Account</p>
-						</Link>
-					</li>
-					<li className="nav-item">
-						{isUserLoggedIn ? (
-							<span onClick={() => signOut()} className="nav-link">
-								<i className="fa fa-sign-out-alt"></i>
-								<p className="nav-item-text">Sign-out</p>
-							</span>
-						) : (
-							<Link href={"/auth/login"} className="nav-link">
-								<i className="fa fa-user"></i>
-								<p className="nav-item-text">Sign-in</p>
-							</Link>
-						)}
-					</li>
-					<li className="nav-item">
-						<Link href="/contact" className="nav-link">
-							<i className="fa fa-phone"></i>
-							<p className="nav-item-text">Contact</p>
-						</Link>
-					</li>
-				</ul>
+				<NavItem
+					isUserLoggedIn={isUserLoggedIn}
+					setIsActive={setIsActive}
+					isActive={isActive}
+				/>
 
 				{/* search bar */}
 				<div className="search-bar">
@@ -143,6 +103,51 @@ const Header: React.FC = () => {
 
 			<Updates />
 		</header>
+	);
+};
+
+interface iNavItemProps {
+	isUserLoggedIn: boolean;
+	setIsActive: React.Dispatch<React.SetStateAction<number>>;
+	isActive: number;
+}
+
+const NavItem: React.FC<iNavItemProps> = ({ isUserLoggedIn, setIsActive, isActive }) => {
+	const navItems = [
+		{ href: "/", icon: "fa fa-home", text: "Home" },
+		{ href: "/menu", icon: "fas fa-utensils", text: "Menu" },
+		{ href: "#", icon: "fa fa-percent", text: "Sales" },
+		{ href: "/endpoints/user/dashboard", icon: "fa fa-user", text: "Account" },
+		{ href: "/contact", icon: "fa fa-phone", text: "Contact" },
+	];
+
+	return (
+		<ul className="nav-items">
+			{navItems.map((item, index) => (
+				<li
+					key={index}
+					className={`nav-item  ${isActive === index ? "active" : ""}`}
+					onClick={() => setIsActive(index)}>
+					<Link href={item.href} className={`nav-link`}>
+						<i className={item.icon}></i>
+						<p className="nav-item-text">{item.text}</p>
+					</Link>
+				</li>
+			))}
+			<li className="nav-item">
+				{isUserLoggedIn ? (
+					<span onClick={() => signOut()} className="nav-link">
+						<i className="fa fa-sign-out-alt"></i>
+						<p className="nav-item-text">Sign-out</p>
+					</span>
+				) : (
+					<Link href={"/auth/login"} className="nav-link">
+						<i className="fa fa-user"></i>
+						<p className="nav-item-text">Sign-in</p>
+					</Link>
+				)}
+			</li>
+		</ul>
 	);
 };
 
