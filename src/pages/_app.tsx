@@ -47,6 +47,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) =>
 					<meta name="category" content={metadata.category || ""} />
 					<meta name="creator" content={metadata.creator || ""} />
 					<meta name="publisher" content={metadata.publisher || ""} />
+					<meta name="algolia-site-verification"  content="8568A666C987767B" />
 				</Head>
 
 				<FullScreenProvider>

@@ -5,11 +5,13 @@ import Updates from "./Updates";
 import { useSession, signOut } from "next-auth/react";
 import Cookies from "js-cookie";
 import { useFullScreen } from "@/context/FullScreenContext";
+import Search from "./AlgoliaSearch/Search";
 
 const Header: React.FC = () => {
 	const { data: session } = useSession();
 	const [isActive, setIsActive] = useState<number>(0);
 	const isUserLoggedIn = !!session;
+	const [showSearch, setShowSearch] = useState<boolean>(false);
 
 	// track cart
 	const { cart } = useFullScreen();
@@ -62,6 +64,12 @@ const Header: React.FC = () => {
 				</div>
 			</div>
 
+			{showSearch && (
+				<div className="searchPopup">
+					<Search />
+				</div>
+			)}
+
 			<nav className="main-nav">
 				<ul className="left-nav-items">
 					<p className="username">{session?.user?.name}</p>
@@ -84,7 +92,11 @@ const Header: React.FC = () => {
 
 				{/* search bar */}
 				<div className="search-bar">
-					<input type="text" placeholder="Search" />
+					<input
+						type="text"
+						placeholder="Search"
+						onClick={() => setShowSearch(!showSearch)}
+					/>
 					<button>
 						<i className="fa fa-search"></i>
 					</button>

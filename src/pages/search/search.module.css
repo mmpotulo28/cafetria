@@ -1,0 +1,38 @@
+
+.search	{
+ margin: 180px auto 150px auto;
+ display: flex;
+ padding: 0 40px;
+ flex-direction: column;
+ gap: 20px
+}
+
+
+.search button {
+ background-color: #4CAF50;
+ color: white;
+ padding: 10px 20px;
+ border: none;
+ border-radius: 5px;
+ cursor: pointer;
+ font-size: 16px;
+ transition: background-color 0.3s ease;
+}
+
+.search button:hover {
+ background-color: #45a049;
+}
+
+.search .json{
+ background-color: #2d2d2d;
+ color: #27b32e;
+ padding: 20px;
+ border-radius: 5px;
+ overflow: auto;
+ font-family: 'Courier New', Courier, monospace;
+ font-size: 14px;
+ line-height: 1.5;
+ white-space: pre-wrap;
+ max-height: 600px;
+ overflow-y: auto;
+}
