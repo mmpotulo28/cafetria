@@ -6,19 +6,33 @@ import { useSession, signOut } from "next-auth/react";
 import Cookies from "js-cookie";
 import { useFullScreen } from "@/context/FullScreenContext";
 import Search from "./AlgoliaSearch/Search";
+import { fetchAccessToken } from "@/lib/auth";
 
 const Header: React.FC = () => {
 	const { data: session } = useSession();
 	const [isActive, setIsActive] = useState<number>(0);
 	const isUserLoggedIn = !!session;
 	const [showSearch, setShowSearch] = useState<boolean>(false);
+	const [cartCount, setCartCount] = useState<number>(0);
 
 	// track cart
 	const { cart } = useFullScreen();
 
 	useEffect(() => {
+		setCartCount(cart.length);
+	}, [cart.length]);
+
+	useEffect(() => {
 		const fetchUserData = async () => {
-			const response = await fetch(`/api/user/profile?email=${session?.user?.email}`);
+			const {token, message} = await fetchAccessToken({ session });
+			console.log(message)
+
+			const response = await fetch(`/api/user/profile?email=${session?.user?.email}`, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+			});
 			const data = await response.json();
 			if (response.ok) {
 				// Cache the data with a 3-minute expiration
@@ -34,7 +48,7 @@ const Header: React.FC = () => {
 				fetchUserData();
 			}
 		}
-	}, [isUserLoggedIn, session?.user?.email]);
+	}, [isUserLoggedIn, session]);
 
 	return (
 		<header>
@@ -107,7 +121,7 @@ const Header: React.FC = () => {
 						<Link href="/cart" className="nav-link">
 							<i className="fa fa-shopping-cart"></i>
 						</Link>
-						<p className="cart-count">{cart.length}</p>
+						<p className="cart-count">{cartCount}</p>
 					</li>
 				</ul>
 				<span id="nav-line"></span>

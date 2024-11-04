@@ -1,4 +1,5 @@
 "use client";
+import { useSession } from "next-auth/react";
 
 import React, { useCallback, useEffect, useState } from "react";
 import DomItem from "./DomItem";
@@ -6,6 +7,7 @@ import { iItem, iItemsBlockProps } from "../lib/Type";
 import { filterByCategory, filterByRecommended, filterByStatus } from "../lib/utils";
 import useEmblaCarousel from "embla-carousel-react";
 import Cookies from "js-cookie";
+import { fetchAccessToken } from "@/lib/auth";
 
 export let scrollPrev: () => void;
 export let scrollNext: () => void;
@@ -106,13 +108,18 @@ const ItemsBlock = ({ itemClassName, filterByChoice, filterByValue }: iItemsBloc
 	});
 
 	const [items, setItems] = useState<iItem[]>(dummyData);
+	const { data: session } = useSession();
 
-	const fetchItems = async () => {
+	const fetchItems = useCallback(async () => {
 		try {
+			const { token, message } = await fetchAccessToken({ session });
+			console.log(message);
+
 			const response = await fetch("/api/items", {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
 				},
 			});
 			if (!response.ok) {
@@ -126,7 +133,7 @@ const ItemsBlock = ({ itemClassName, filterByChoice, filterByValue }: iItemsBloc
 		} catch (error) {
 			console.error("Error fetching items:", error);
 		}
-	};
+	}, [session]);
 
 	// remove all dummy data on items
 	useEffect(() => {
@@ -149,7 +156,7 @@ const ItemsBlock = ({ itemClassName, filterByChoice, filterByValue }: iItemsBloc
 		} else {
 			fetchItems();
 		}
-	}, []);
+	}, [fetchItems, session]);
 
 	scrollPrev = useCallback(() => {
 		if (emblaApi) emblaApi.scrollPrev();
