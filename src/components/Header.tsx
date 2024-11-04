@@ -24,8 +24,8 @@ const Header: React.FC = () => {
 
 	useEffect(() => {
 		const fetchUserData = async () => {
-			const {token, message} = await fetchAccessToken({ session });
-			console.log(message)
+			const {token} = await fetchAccessToken({ session });
+			// console.log(message)
 
 			const response = await fetch(`/api/user/profile?email=${session?.user?.email}`, {
 				headers: {
