@@ -23,11 +23,10 @@ steps:
   env:
     ALGOLIA_APP_ID: $(ALGOLIA_APP_ID)
     ALGOLIA_API_KEY: $(ALGOLIA_API_KEY)
-    # Reference other environment variables as needed
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: 'out'
+    PathtoPublish: '.next'  # Update this path to match your build output
     ArtifactName: 'drop'
     publishLocation: 'Container'
   displayName: 'Publish build artifacts'
