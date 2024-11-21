@@ -4,6 +4,9 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+- group: NextJsEnvironmentVariables
+
 steps:
 - task: NodeTool@0
   inputs:
@@ -17,10 +20,10 @@ steps:
 - script: |
     npm run build
   displayName: 'Build Next.js application'
-
-- script: |
-    npm run export
-  displayName: 'Export static files' # Only needed if using static export with Next.js
+  env:
+    ALGOLIA_APP_ID: $(ALGOLIA_APP_ID)
+    ALGOLIA_API_KEY: $(ALGOLIA_API_KEY)
+    # Reference other environment variables as needed
 
 - task: PublishBuildArtifacts@1
   inputs:
