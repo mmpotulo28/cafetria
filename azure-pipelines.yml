@@ -1,0 +1,30 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '20.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+  displayName: 'Install dependencies'
+
+- script: |
+    npm run build
+  displayName: 'Build Next.js application'
+
+- script: |
+    npm run export
+  displayName: 'Export static files' # Only needed if using static export with Next.js
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'out'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+  displayName: 'Publish build artifacts'
